@@ -6,6 +6,7 @@ output: pdf_document
 ---
 
 # Set-up your environment
+text
 
 ```{r package_install, include=FALSE}
 install.packages("tidyverse")
