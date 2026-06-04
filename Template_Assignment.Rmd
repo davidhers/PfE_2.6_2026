@@ -24,9 +24,9 @@ require(yaml)
 
 Include your names
 
-Include the tutorial group number
+Group 2.6
 
-Include your tutorial lecturer's name
+Tutorial Lecturer: Fatima Amankour
 
 # Part 1 - Identify a Social Problem
 
