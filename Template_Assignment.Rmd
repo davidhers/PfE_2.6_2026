@@ -40,13 +40,13 @@ Include the following:
 
 -   Overweightness in the Netherlands: A Social Problem Hidden in Plain Sight
 
-Walk through any Dutch city today and the numbers get to ignore. More than half of Dutch adults are overweight, one in six has obesity, and if current trends continue, two in three people could be affected by 2050. What was once seen as a personal health issue has become a major social challenge.
+Walk through any Dutch city today and the numbers get to ignore. More than half of Dutch adults are overweight, one in six has obesity (Rijksinstituut voor Volksgezondheid en Milieu [RIVM], 2026), and if current trends continue, two in three people could be affected by 2050. What was once seen as a personal health issue has become a major social challenge.
 This became clear when Zorginstituut Nederland announced that bariatric surgery will now be covered by basic health insurance for teenagers aged 13 to 18 with severe obesity. Although only a small number of young people will qualify, the decision reflects growing recognition that lifestyle interventions alone are not always enough.
-To understand obesity, however, we must look beyond individual choices. In the Netherlands, obesity is strongly linked to social inequality. People with lower levels of education are significantly more likely to be overweight than university graduates. Lower-income groups often have less access to healthy food, safe places to exercise, and supportive living environments. Research also shows that factors such as neighbourhood safety, green spaces, and social cohesion influence obesity rates.
+To understand obesity, however, we must look beyond individual choices. In the Netherlands, obesity is strongly linked to social inequality. People with lower levels of education are significantly more likely to be overweight than university graduates (RIVM, 2026). Lower-income groups often have less access to healthy food, safe places to exercise, and supportive living environments. Research also shows that factors such as neighbourhood safety, green spaces, and social cohesion influence obesity rates.(OECD & European Observatory on Health Systems and Policies, 2025).
 The consequences extend beyond health. Obesity is associated with higher healthcare costs, lower earnings, increased sick leave, and reduced economic productivity. Children with obesity are more likely to face educational, social, and health disadvantages later in life.
 This argues that obesity in the Netherlands should be viewed as a social problem rather than simply a matter of personal responsibility. Addressing it effectively requires tackling the structural inequalities that make obesity more common among disadvantaged groups.
 
-Sources: NOS (2026), CBS, RIVM/Volksgezondheidenzorg.info, GGD Zaanstreek-Waterland, Pharos, OECD Country Health Profile Netherlands 2025, PMC/NCJ.
+
 
 
 
