@@ -1,6 +1,6 @@
 ---
 title: "Overweightness and SES"
-author: "Norah Aalders"
+author: "Norah Aalders, Sinem Göral 2817932"
 date: "`r Sys.Date()`"
 output: pdf_document
 ---
