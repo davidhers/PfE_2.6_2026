@@ -1,6 +1,6 @@
 ---
 title: "Overgewicht en SES"
-author: "Studentnames and studentnumbers here"
+author: "Norah Aalders"
 date: "`r Sys.Date()`"
 output: pdf_document
 ---
