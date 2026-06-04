@@ -183,3 +183,16 @@ Provide the link to your PUBLIC repository here: ...
 ## 5.2 Reference list
 
 Use APA referencing throughout your document.
+
+Centraal Bureau voor de Statistiek. (2024, oktober). Obesitas afgelopen 40 jaar verdrievoudigd. https://www.cbs.nl/nl-nl/nieuws/2024/10/obesitas-afgelopen-40-jaar-verdrievoudigd
+
+GGD Zaanstreek-Waterland. (2022). Wat kost overgewicht? https://www.ggdzw.nl/wat-kost-overgewicht/
+
+NOS. (2026, 4 juni). Maagverkleining voor kinderen met obesitas in basispakket als laatste redmiddel. https://nos.nl/artikel/2617067-maagverkleining-voor-kinderen-met-obesitas-in-basispakket-als-laatste-redmiddel
+
+OECD & European Observatory on Health Systems and Policies. (2025). State of health in the EU: Netherlands — Country health profile 2025. OECD Publishing. https://www.oecd.org/en/publications/country-health-profile-2025-country-notes_c0e8b8be-en/netherlands_95a85df5-en.html
+
+Rijksinstituut voor Volksgezondheid en Milieu. (2026). Overgewicht — Volwassenen. Volksgezondheidenzorg.info. https://www.vzinfo.nl/overgewicht/volwassenen
+
+Rijksinstituut voor Volksgezondheid en Milieu. (2026). Sociaaleconomische gezondheidsverschillen. Volksgezondheidenzorg.info. https://www.vzinfo.nl/sociaaleconomische-gezondheidsverschillen
+
