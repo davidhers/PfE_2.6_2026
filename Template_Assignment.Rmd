@@ -1,5 +1,5 @@
 ---
-title: "Overgewicht en SES"
+title: "Overweightness and SES"
 author: "Norah Aalders"
 date: "`r Sys.Date()`"
 output: pdf_document
