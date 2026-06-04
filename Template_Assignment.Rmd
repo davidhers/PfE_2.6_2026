@@ -1,11 +1,12 @@
 ---
-title: "Template"
-author: "Studentnames and studentnumbers here"
+title: "Overweightness and SES"
+author: "Norah Aalders 2889433, Sinem Göral 2817932"
 date: "`r Sys.Date()`"
 output: pdf_document
 ---
 
 # Set-up your environment
+text
 
 ```{r package_install, include=FALSE}
 install.packages("tidyverse")
