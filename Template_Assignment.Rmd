@@ -57,7 +57,14 @@ This argues that obesity in the Netherlands should be viewed as a social problem
 Preferably from a URL, but if not, make sure to download the data and store it in a shared location that you can load the data in from. Do not store the data in a folder you include in the Github repository!
 
 ```{r loading_data}
-dataset <- midwest
+gewicht_provincies <- read_xlsx("data/Gezondheidsmonitor__regio__2024_04062026_114221.xlsx")
+saveRDS(gewicht_provincies, "data/gewicht_provincies.rds")
+
+overgewicht_over_tijd <- read_xlsx("data/Lengte__onder__en_overgewicht_vanaf_1981_04062026_120636.xlsx")
+saveRDS(overgewicht_over_tijd, "data/overgewicht_over_tijd.rds")
+
+inkomen_provincies <- read_xlsx("data/Inkomens_Huishouden.xlsx")
+saveRDS(inkomen_provincies, "data/inkomen_provincies.rds")
 ```
 
 midwest is an example dataset included in the tidyverse package
@@ -67,17 +74,7 @@ midwest is an example dataset included in the tidyverse package
 ```{r}
 
 
-gewicht_provincies <- read_xlsx("data/Gezondheidsmonitor__regio__2024_04062026_114221.xlsx")
 
-saveRDS(gewicht_provincies, "data/gewicht_provincies.rds")
-
-overgewicht_over_tijd <- read_xlsx("data/Lengte__onder__en_overgewicht_vanaf_1981_04062026_120636.xlsx")
-
-saveRDS(overgewicht_over_tijd, "data/overgewicht_over_tijd.rds")
-
-head(overgewicht_over_tijd)
-
-#dataset <- readRDS()
 ```
 
 
@@ -104,17 +101,21 @@ Think of things like:
 Say we want to include only larger distances (above 2) in our dataset, we can filter for this.
 
 ```{r data_cleaning}
-overgewicht_over_tijd[4] 
-overgewicht_81 = overgewicht_over_tijd[1,5]
-overgewicht_21 = overgewicht_over_tijd[10,5]
-proc_ver_overgewicht = ((overgewicht_21 - overgewicht_81) / overgewicht_81) * 100
+overgewicht_1981 = overgewicht_over_tijd[1,5]
+overgewicht_2021 = overgewicht_over_tijd[10,5]
 
-print(proc_ver_overgewicht)
-
-x <- overgewicht_over_tijd[[4]][1:10]
-y <- overgewicht_over_tijd[[5]][1:10]
-plot(x, y, type = 'b') 
 ```
+
+```{r data_cleaning}
+time_all_ages <- overgewicht_over_tijd[[4]][1:10]
+perc_overgewicht <- overgewicht_over_tijd[[5]][1:10]
+perc_obesitas <- overgewicht_over_tijd[[7]][1:10]
+```
+
+```{r}
+
+```
+
 
 Please use a separate 'R block' of code for each type of cleaning. So, e.g. one for missing values, a new one for removing unnecessary variables etc.
 
@@ -123,7 +124,7 @@ Please use a separate 'R block' of code for each type of cleaning. So, e.g. one 
 Variable 1
 
 ```{r gen_var1}
-
+proc_ver_overgewicht = ((overgewicht_2021 - overgewicht_1981) / overgewicht_1981) * 100
 ```
 
 Variable 2
@@ -135,7 +136,18 @@ Variable 2
 ## 3.3 Visualize temporal variation
 
 ```{r}
+plot(time_all_ages, perc_overgewicht,
+     type = "l",
+     xlab = "Jaar",
+     ylab = "Percentage overweight people",
+     ylim = c(0,50)
+     )
 
+lines(time_all_ages, perc_obesitas, lty = 3)
+
+legend("topleft",
+       legend = c("Overgewicht", "Obesitas"),
+       lty = c(1, 3))
 ```
 
 ## 3.4 Visualize spatial variation
