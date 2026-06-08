@@ -148,9 +148,9 @@ data_regios <- gewicht_regios[grepl("\\(GG\\)", gewicht_regios[[3]] ), 3:12]
 
 The dataset (data_regios) is built up in regions instead of provences. To compare this dataset to the other datasets, which are built up in provences, the regions need to be transformed into provences aswell. This is done with the following data from AlleCijfers.nl (AlleCijfers, 2026).
 
-```{r}
+```{r data_cleaning_function}
 
-data_analysis <- function(regio1, regio2, regio3, regio4, data1, data2, data3, data4){
+data_analysis <- function(regio1 = 0, data1 = 0, regio2 = 0, data2 = 0, regio3 = 0, data3 = 0, regio4 = 0, data4 = 0, regio5 = 0,  data5 = 0){
   totaal_provincie <- regio1 + regio2 + regio3 + regio4
   data_provincie <- ((regio1 / totaal_provincie) * data1) + ((regio2 / totaal_provincie) * data2) + ((regio3 / totaal_provincie) * data3) + ((regio4 / totaal_provincie) * data4)  
   
@@ -158,12 +158,80 @@ data_analysis <- function(regio1, regio2, regio3, regio4, data1, data2, data3, d
   
 }
 
-data_groningen <- data_analysis()
+```
 
-data_overrijsel <- data_analysis(ijsselland, twente, 0, 0, data_regios[3,2:10], data_regios[4,2:10], 0, 0 )
-data_
+```{r data_GGD_regions(AlleCijfers, 2026)}
+groningen <- 601286
 
+friesland <- 665208
 
+drenthe <- 508109
+
+ijsselland <- 555879
+twente <- 646496
+
+flevoland <- 462816
+
+noord_oost_gelderland <- 851876
+gelderland_midden <- 731773
+gelderland_zuid <- 589699
+
+utrecht <- 1415104
+
+hollands_noorden <- 687079
+zaanstreek <- 354021
+kennemerland <- 570752
+amsterdam <- 1151282
+gooi <- 246252
+
+haaglanden <- 1176111
+hollands_midden <- 854306
+rotterdam <- 1376801
+zuid_holland_zuid <- 475490
+
+zeeland <- 394538
+
+west_brabant <-734825
+hart_brabant <- 1122960
+brabant_zuidoost <- 819169
+
+limburg_noord <- 537019
+limburg_zuid <- 601355
+
+nederland <- groningen + friesland + drenthe + ijsselland + twente +flevoland + noord_oost_gelderland + gelderland_midden + gelderland_zuid + utrecht + hollands_noorden + zaanstreek + kennemerland +amsterdam + gooi + haaglanden + hollands_midden + rotterdam + zuid_holland_zuid + zeeland + west_brabant + hart_brabant + brabant_zuidoost + limburg_noord + limburg_zuid
+```
+
+```{r}
+gezondheids_data_provincies <- rbind(Nederland = data_nederland <- data_analysis(nederland, gewicht_regios[1, 4:12]),
+                              Groningen = data_groningen <- data_analysis(groningen, data_regios[1, 2:10]),
+
+                              Friesland = data_friesland <- data_analysis(friesland, data_regios[24, 2:10]),
+
+                              Drenthe = data_drenthe <- data_analysis(drenthe , data_regios[2, 2:10]),
+
+                              Overrijsel = data_overrijsel <- data_analysis(ijsselland, data_regios[3,2:10], twente, data_regios[4,2:10]),
+
+                              Flevoland = data_flevoland <- data_analysis(flevoland , data_regios[8, 2:10]),
+      
+                              Gelderland = data_gelderland <- data_analysis(noord_oost_gelderland, data_regios[5, 2:10], gelderland_midden, data_regios[6, 2:10], gelderland_zuid, data_regios[7, 2:10]),
+                              
+                              Utrecht = data_utrecht <- data_analysis(utrecht, data_regios[9, 2:10]),
+                              
+                              Noord_Holland = data_noord_holland <- data_analysis(hollands_noorden , data_regios[10, 2:10], zaanstreek, data_regios[25, 2:10], kennemerland, data_regios[11, 2:10], amsterdam, data_regios[12, 2:10], gooi, data_regios[13, 2:10]),
+
+                              Zuid_Holland = data_zuid_holland <- data_analysis(haaglanden, data_regios[23, 2:10], hollands_midden, data_regios[14, 2:10], rotterdam, data_regios[15, 2:10], zuid_holland_zuid, data_regios[16, 2:10]),
+
+                              Zeeland = data_zeeland <- data_analysis(zeeland , data_regios[17, 2:10]),
+
+                              Brabant = data_brabant <- data_analysis(west_brabant, data_regios[18, 2:10], hart_brabant, data_regios[19, 2:10], brabant_zuidoost, data_regios[20, 2:10]),
+
+                              Limburg = data_limburg <- data_analysis(limburg_noord, data_regios[21, 2:10], limburg_zuid, data_regios[22, 2:10]))
+
+gezondheids_data_provincies <- as.data.frame(gezondheids_data_provincies)
+```
+
+```{r}
+Overgewicht_provincies <- gezondheids_data_provincies[c(3, 4)]
 ```
 
 
