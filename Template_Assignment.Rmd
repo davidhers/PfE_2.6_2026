@@ -59,17 +59,17 @@ This argues that obesity in the Netherlands should be viewed as a social problem
 Preferably from a URL, but if not, make sure to download the data and store it in a shared location that you can load the data in from. Do not store the data in a folder you include in the Github repository!
 
 ```{r loading_data}
-gewicht_provincies <- read_xlsx("data/Gezondheidsmonitor__regio__2024_04062026_114221.xlsx")
-saveRDS(gewicht_provincies, "data/gewicht_provincies.rds")
+gewicht_regios <- read_xlsx("data/Gezondheidsmonitor__regio__2024_04062026_114221.xlsx")
+saveRDS(gewicht_regios, "data/gewicht_regios.rds")
 
 overgewicht_over_tijd <- read_xlsx("data/Lengte__onder__en_overgewicht_vanaf_1981_04062026_120636.xlsx")
 saveRDS(overgewicht_over_tijd, "data/overgewicht_over_tijd.rds")
 
-inkomen_provincies <- read_xlsx("data/Inkomens_Huishouden.xlsx")
-saveRDS(inkomen_provincies, "data/inkomen_provincies.rds")
+inkomen_dataset <- read_xlsx("data/Inkomens_Huishouden.xlsx")
+saveRDS(inkomen_dataset, "data/inkomen_dataset.rds")
 
-opleiding_provincie <- read_xlsx("data/Onderwijs_per_provincie.xlsx")
-saveRDS(opleiding_provincie, "data/opleiding_provincies.rds")
+opleiding_dataset <- read_xlsx("data/Onderwijs_per_provincie.xlsx")
+saveRDS(opleiding_dataset, "data/opleiding_dataset.rds")
 
 
 ```
@@ -84,7 +84,7 @@ midwest is an example dataset included in the tidyverse package
 
 ```
 
-https://allecijfers.nl/ggd-regios/
+
 https://www.staatvenz.nl/kerncijfers/overgewicht-en-obesitas-volwassenen
 
 ``` r
@@ -109,19 +109,60 @@ Think of things like:
 
 Say we want to include only larger distances (above 2) in our dataset, we can filter for this.
 
-```{r data_cleaning}
+```{r data_cleaning_1}
 overgewicht_1981 = overgewicht_over_tijd[1,5]
 overgewicht_2021 = overgewicht_over_tijd[10,5]
 
 ```
 
-```{r data_cleaning}
+```{r data_cleaning_2}
 time_all_ages <- overgewicht_over_tijd[[4]][1:10]
 perc_overgewicht <- overgewicht_over_tijd[[5]][1:10]
 perc_obesitas <- overgewicht_over_tijd[[7]][1:10]
 ```
 
+```{r data_cleaning_3}
+opleiding_provincie <- opleiding_dataset[c(1, 6:17),]
+
+hoogopgeleide_provincie <- data.frame(Regio = opleiding_provincie[[4]],
+                          Percentage_hoogopgeleide = opleiding_provincie[[9]] + opleiding_provincie[[10]])
+
+middelopgeleide_provincie <- data.frame(Regio = opleiding_provincie[[4]],
+                            Percentage_middelopgeleide = opleiding_provincie[[8]])
+
+
+laagopgeleide_provincie <- data.frame(Regio = opleiding_provincie[[4]],
+                          Percentage_laagopgeleide = opleiding_provincie[[6]] + opleiding_provincie[[7]])
+
+```
+
+```{r data_cleaning_4}
+inkomen_provincie <- inkomen_dataset[1:13,]
+gemiddeld_inkomen <- data.frame(Regio = inkomen_provincie[[4]],
+                                "Gemiddeld_inkomen(x 1000)" = inkomen_provincie[[6]])
+```
+
+```{r data_cleaning_4}
+data_regios <- gewicht_regios[grepl("\\(GG\\)", gewicht_regios[[3]] ), 3:12]
+```
+
+The dataset (data_regios) is built up in regions instead of provences. To compare this dataset to the other datasets, which are built up in provences, the regions need to be transformed into provences aswell. This is done with the following data from AlleCijfers.nl (AlleCijfers, 2026).
+
 ```{r}
+
+data_analysis <- function(regio1, regio2, regio3, regio4, data1, data2, data3, data4){
+  totaal_provincie <- regio1 + regio2 + regio3 + regio4
+  data_provincie <- ((regio1 / totaal_provincie) * data1) + ((regio2 / totaal_provincie) * data2) + ((regio3 / totaal_provincie) * data3) + ((regio4 / totaal_provincie) * data4)  
+  
+  return(data_provincie)
+  
+}
+
+data_groningen <- data_analysis()
+
+data_overrijsel <- data_analysis(ijsselland, twente, 0, 0, data_regios[3,2:10], data_regios[4,2:10], 0, 0 )
+data_
+
 
 ```
 
@@ -216,6 +257,7 @@ Provide the link to your PUBLIC repository here: ...
 ## 5.2 Reference list
 
 Use APA referencing throughout your document.
+AlleCijfers. (2026, April). GGD-regio's: overzicht en statistieken per GGD-regio.https://allecijfers.nl/ggd-regios/
 
 Centraal Bureau voor de Statistiek. (2024, oktober). Obesitas afgelopen 40 jaar verdrievoudigd. https://www.cbs.nl/nl-nl/nieuws/2024/10/obesitas-afgelopen-40-jaar-verdrievoudigd
 
