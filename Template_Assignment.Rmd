@@ -25,6 +25,12 @@ library(readxl)
 # Title Page
 
 Include your names
+David Hers
+Norah Aalders
+Casper Flipse
+Sinem Göral
+Chris Kool
+Roel van Soelen
 
 Group 2.6
 
