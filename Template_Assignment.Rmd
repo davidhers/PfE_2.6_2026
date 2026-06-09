@@ -9,10 +9,10 @@ output: pdf_document
 text
 
 ```{r package_install, include=FALSE}
-install.packages("tidyverse")
-install.packages("yaml")
-install.packages("rmarkdown")
-install.packages()
+#install.packages("tidyverse")
+#install.packages("yaml")
+#install.packages("rmarkdown")
+#install.packages()
 ```
 
 ```{r packages}
@@ -25,6 +25,12 @@ library(readxl)
 # Title Page
 
 Include your names
+David Hers
+Norah Aalders 2889433
+Casper Flipse
+Sinem Göral, 2817932
+Chris Kool, 2898107
+Roel van Soelen
 
 Group 2.6
 
@@ -146,6 +152,11 @@ gemiddeld_inkomen <- data.frame(Regio = inkomen_provincie[[4]],
 
 ```{r data_cleaning_4}
 data_regios <- gewicht_regios[grepl("\\(GG\\)", gewicht_regios[[3]] ), 3:12]
+```
+
+
+```{r data_mergen}
+opleidingsniveau_provincies <- full_join(full_join(laagopgeleide_provincie, middelopgeleide_provincie), hoogopgeleide_provincie)
 ```
 
 The dataset (data_regios) is built up in regions instead of provences. To compare this dataset to the other datasets, which are built up in provences, the regions need to be transformed into provences aswell. This is done with the following data from AlleCijfers.nl (AlleCijfers, 2026).
