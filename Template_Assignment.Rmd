@@ -119,6 +119,8 @@ overgewicht_2021 = overgewicht_over_tijd[10,5]
 time_all_ages <- overgewicht_over_tijd[[4]][1:10]
 perc_overgewicht <- overgewicht_over_tijd[[5]][1:10]
 perc_obesitas <- overgewicht_over_tijd[[7]][1:10]
+perc_men <- overgewicht_over_tijd[[5]][40:49]
+perc_women <- overgewicht_over_tijd[[5]][79:88]
 ```
 
 ```{r data_cleaning_3}
@@ -285,19 +287,32 @@ Here you provide a description of why the plot above is relevant to your specifi
 What is the poverty rate by state?
 
 ```{r visualise_subpopulations}
-dataset$inmetro <- dataset$inmetro %>% as.factor()
-# Boxplot of poverty rate by state using the 'midwest' dataset
-ggplot(dataset, aes(x = inmetro, y = percadultpoverty)) +
-  geom_boxplot() +
-  labs(
-    title = "Distribution of Poverty Rates by Metropolitan status (Midwest counties)",
-    x = "Metropolitan Area",
-    y = "Poverty Rate of Adults (%)"
-  ) +
-  theme_minimal() +
-  theme(
-    legend.position = "right"
-  )
+
+ggplot() +
+  geom_line(aes(x = time_all_ages,
+                y = perc_overgewicht,
+                color = "Overgewicht")) +
+  geom_line(aes(x = time_all_ages,
+                y = perc_men,
+                color = "Men")) +
+  geom_line(aes(x = time_all_ages,
+                y = perc_women,
+                color = "Women")) +
+  geom_point(aes(x = time_all_ages,
+                y = perc_overgewicht)) +
+  geom_point(aes(x = time_all_ages,
+                 y = perc_men)) +
+  geom_point(aes(x= time_all_ages,
+              y = perc_women))  +
+  scale_color_manual( values = c("Overgewicht" = "black",
+                                 "Men" = "blue",
+                                 "Women" = "deeppink")) +
+  ylim(0,50) +
+  labs(title = "Percentage of overweight people over time in the Netherlands",
+       x = "Year",
+       y = "Percentage of people",
+       color = "group")
+
 ```
 
 Here you provide a description of why the plot above is relevant to your specific social problem.
