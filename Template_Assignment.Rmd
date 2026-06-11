@@ -13,6 +13,8 @@ text
 #install.packages("yaml")
 #install.packages("rmarkdown")
 #install.packages()
+install.packages("sf")   # alleen één keer nodig
+
 ```
 
 ```{r packages}
@@ -20,6 +22,7 @@ require(tidyverse)
 require(rmarkdown)
 require(yaml)
 library(readxl)
+library(sf)
 ```
 
 # Title Page
@@ -215,14 +218,13 @@ nederland <- groningen + friesland + drenthe + ijsselland + twente +flevoland + 
 ```
 
 ```{r}
-gezondheids_data_provincies <- rbind(Nederland = data_nederland <- data_analysis(nederland, gewicht_regios[1, 4:12]),
-                              Groningen = data_groningen <- data_analysis(groningen, data_regios[1, 2:10]),
+gezondheids_data_provincies <- rbind(Groningen = data_groningen <- data_analysis(groningen, data_regios[1, 2:10]),
 
-                              Friesland = data_friesland <- data_analysis(friesland, data_regios[24, 2:10]),
+                              Fryslân = data_friesland <- data_analysis(friesland, data_regios[24, 2:10]),
 
                               Drenthe = data_drenthe <- data_analysis(drenthe , data_regios[2, 2:10]),
 
-                              Overrijsel = data_overrijsel <- data_analysis(ijsselland, data_regios[3,2:10], twente, data_regios[4,2:10]),
+                              Overijssel = data_overrijsel <- data_analysis(ijsselland, data_regios[3,2:10], twente, data_regios[4,2:10]),
 
                               Flevoland = data_flevoland <- data_analysis(flevoland , data_regios[8, 2:10]),
       
@@ -230,21 +232,28 @@ gezondheids_data_provincies <- rbind(Nederland = data_nederland <- data_analysis
                               
                               Utrecht = data_utrecht <- data_analysis(utrecht, data_regios[9, 2:10]),
                               
-                              Noord_Holland = data_noord_holland <- data_analysis(hollands_noorden , data_regios[10, 2:10], zaanstreek, data_regios[25, 2:10], kennemerland, data_regios[11, 2:10], amsterdam, data_regios[12, 2:10], gooi, data_regios[13, 2:10]),
+                              "Noord-Holland" = data_noord_holland <- data_analysis(hollands_noorden , data_regios[10, 2:10], zaanstreek, data_regios[25, 2:10], kennemerland, data_regios[11, 2:10], amsterdam, data_regios[12, 2:10], gooi, data_regios[13, 2:10]),
 
-                              Zuid_Holland = data_zuid_holland <- data_analysis(haaglanden, data_regios[23, 2:10], hollands_midden, data_regios[14, 2:10], rotterdam, data_regios[15, 2:10], zuid_holland_zuid, data_regios[16, 2:10]),
+                              "Zuid-Holland" = data_zuid_holland <- data_analysis(haaglanden, data_regios[23, 2:10], hollands_midden, data_regios[14, 2:10], rotterdam, data_regios[15, 2:10], zuid_holland_zuid, data_regios[16, 2:10]),
 
                               Zeeland = data_zeeland <- data_analysis(zeeland , data_regios[17, 2:10]),
 
-                              Brabant = data_brabant <- data_analysis(west_brabant, data_regios[18, 2:10], hart_brabant, data_regios[19, 2:10], brabant_zuidoost, data_regios[20, 2:10]),
+                              "Noord-Brabant" = data_brabant <- data_analysis(west_brabant, data_regios[18, 2:10], hart_brabant, data_regios[19, 2:10], brabant_zuidoost, data_regios[20, 2:10]),
 
                               Limburg = data_limburg <- data_analysis(limburg_noord, data_regios[21, 2:10], limburg_zuid, data_regios[22, 2:10]))
 
 gezondheids_data_provincies <- as.data.frame(gezondheids_data_provincies)
+
+gezondheids_data_provincies$Provincie <- rownames(gezondheids_data_provincies)
+rownames(gezondheids_data_provincies) <- NULL
+gezondheids_data_provincies <- gezondheids_data_provincies[, c("Provincie",
+                                                               setdiff(names(gezondheids_data_provincies), "Provincie"))]
 ```
 
 ```{r}
-Overgewicht_provincies <- gezondheids_data_provincies[c(3, 4)]
+overgewicht_provincies <- gezondheids_data_provincies[c(1,4)]
+obesitas_provincies <- gezondheids_data_provincies[c(1,5)]
+names(overgewicht_provincies)[2] <- "overgewicht"
 ```
 
 
@@ -288,7 +297,24 @@ ggplot() +
 ## 3.4 Visualize spatial variation
 
 ```{r visualise_map}
+provinces <- st_read(paste0(
+  "https://service.pdok.nl/cbs/gebiedsindelingen/2024/wfs/v1_0?",
+  "request=GetFeature&service=WFS&version=2.0.0",
+  "&typeName=provincie_gegeneraliseerd&outputFormat=application/json"
+))
 
+provinces$statnaam 
+
+nl_map <- provinces |> left_join(overgewicht_provincies, by = c("statnaam" = "Provincie")) 
+
+
+ggplot(nl_map) +
+  geom_sf(aes(fill = overgewicht ), color = "white", linewidth = 0.4) +
+  scale_fill_gradient(name = "overgewicht", low = "#e8f5e9", high = "#1b5e20") +
+  labs(
+    title   = "Simulated values by Dutch province"  ) +
+  theme_void() +
+  theme(plot.title = element_text(hjust = 0.5, face = "bold"))
 ```
 
 Here you provide a description of why the plot above is relevant to your specific social problem.
