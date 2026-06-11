@@ -160,6 +160,9 @@ data_regios <- gewicht_regios[grepl("\\(GG\\)", gewicht_regios[[3]] ), 3:12]
 
 ```{r data_mergen}
 opleidingsniveau_provincies <- full_join(full_join(laagopgeleide_provincie, middelopgeleide_provincie), hoogopgeleide_provincie)
+opleidingsniveau_provincies <- opleidingsniveau_provincies[2:13,]
+
+
 ```
 
 The dataset (data_regios) is built up in regions instead of provences. To compare this dataset to the other datasets, which are built up in provences, the regions need to be transformed into provences aswell. This is done with the following data from AlleCijfers.nl (AlleCijfers, 2026).
@@ -312,6 +315,44 @@ nl_map <- provinces |> left_join(overgewicht_provincies, by = c("statnaam" = "Pr
 ggplot(nl_map) +
   geom_sf(aes(fill = overgewicht ), color = "white", linewidth = 0.4) +
   scale_fill_gradient(name = "overgewicht", low = "#e8f5e9", high = "#1b5e20") +
+  labs(
+    title   = "Simulated values by Dutch province"  ) +
+  theme_void() +
+  theme(plot.title = element_text(hjust = 0.5, face = "bold"))
+```
+
+```{r}
+opleidingsniveau_provincies[1,1] <- "Groningen"
+opleidingsniveau_provincies[2,1] <- "Fryslân"
+opleidingsniveau_provincies[3,1] <- "Drenthe"
+opleidingsniveau_provincies[4,1] <- "Overijssel"
+opleidingsniveau_provincies[5,1] <- "Flevoland"
+opleidingsniveau_provincies[6,1] <- "Gelderland"
+opleidingsniveau_provincies[7,1] <- "Utrecht"
+opleidingsniveau_provincies[8,1] <- "Noord-Holland"
+opleidingsniveau_provincies[9,1] <- "Zuid-Holland"
+opleidingsniveau_provincies[10,1] <- "Zeeland"
+opleidingsniveau_provincies[11,1] <- "Noord-Brabant"
+opleidingsniveau_provincies[12,1] <- "Limburg"
+
+opleidingsniveau_provincies <- opleidingsniveau_provincies[c(1,4)]
+```
+
+```{r}
+provincie_map2 <- st_read(paste0(
+  "https://service.pdok.nl/cbs/gebiedsindelingen/2024/wfs/v1_0?",
+  "request=GetFeature&service=WFS&version=2.0.0",
+  "&typeName=provincie_gegeneraliseerd&outputFormat=application/json"
+))
+
+provincie_map2$statnaam 
+
+nl_map2 <- provincie_map2 |> left_join(opleidingsniveau_provincies, by = c("statnaam" = "Regio")) 
+
+
+ggplot(nl_map2) +
+  geom_sf(aes(fill = Percentage_hoogopgeleide ), color = "white", linewidth = 0.4) +
+  scale_fill_gradient(name = "percentage_hoogopgeleide", low = "#e8f5e9", high = "#1b5e20") +
   labs(
     title   = "Simulated values by Dutch province"  ) +
   theme_void() +
