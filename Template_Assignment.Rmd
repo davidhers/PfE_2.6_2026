@@ -29,7 +29,7 @@ library(sf)
 
 Include your names
 David Hers
-Norah Aalders 2889433
+Norah Aalders, 2889433
 Casper Flipse, 2898924
 Sinem Göral, 2817932
 Chris Kool, 2898107
