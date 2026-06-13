@@ -281,76 +281,87 @@ Variable 2
 ## 3.3 Visualize temporal variation
 
 ```{r}
-ggplot() +
+perc_over_time_plot = ggplot() +
   geom_line(aes(x = perc_overgewicht[[1]],
                 y = perc_overgewicht[[2]],
-                color = "Overgewicht")) +
+                color = "Overweight")) +
   geom_line(aes(x = perc_overgewicht[[1]],
                 y = perc_overgewicht[[3]],
-                color = "Obesitas")) +
+                color = "Obesity")) +
     geom_point(aes(x = perc_overgewicht[[1]],
                  y = perc_overgewicht[[2]])) +
   geom_point(aes(x = perc_overgewicht[[1]],
                  y = perc_overgewicht[[3]])) +
   scale_x_continuous(breaks = seq(1980, 2025, by = 5)) +
   ylim(0,50) +
-  labs(title = "Percentage of overweight people over time in the Netherlands",
+  labs(title = "Percentage of overweight people\n over time in the Netherlands (1981-2025)",
        x = "Year",
-       y = "Percentage of people")
+       y = "Percentage of people") +
+      theme(plot.title = element_text(hjust = 0.5))
 
+ggsave("Graphs/Percentage_overgewicht_over_tijd.png", perc_over_time_plot, width = 9, height = 6)
 ```
 
 ## 3.4 Visualize spatial variation
 
 ```{r visualise_map}
-provinces <- st_read(paste0(
+provincies_kaart <- st_read(paste0(
   "https://service.pdok.nl/cbs/gebiedsindelingen/2024/wfs/v1_0?",
   "request=GetFeature&service=WFS&version=2.0.0",
   "&typeName=provincie_gegeneraliseerd&outputFormat=application/json"
 ))
 
-provinces$statnaam 
+provincies_kaart$statnaam 
 
-nl_map <- provinces |> left_join(dataset_map, by = c("statnaam" = "Regio")) 
+nl_map <- provincies_kaart |> left_join(dataset_map, by = c("statnaam" = "Regio")) 
 
 
-ggplot(nl_map) +
+map_overweight <- ggplot(nl_map) +
   geom_sf(aes(fill = Overgewicht ), color = "white", linewidth = 0.4) +
-  scale_fill_gradient(name = "Overgewicht", low = "#e8f5e9", high = "#1b5e20") +
+  scale_fill_gradient(name = "Percentage of \noverweight people \n(reversed)", high = "#e8f5e9", 
+  low = "#1b5e20") +
   labs(
-    title   = "Simulated values by Dutch province"  ) +
+    title   = "Percentage of overweight people\n by province in the Netherlands (2024)"  ) +
   theme_void() +
   theme(plot.title = element_text(hjust = 0.5, face = "bold"))
+
+ggsave("graphs/map_overweight_people.png", map_overweight, width = 6, height = 10)
 ```
 
 ```{r}
- ggplot(nl_map) +
+map_high_education <- ggplot(nl_map) +
   geom_sf(aes(fill = Percentage_hoogopgeleide ), color = "white", linewidth = 0.4) +
-  scale_fill_gradient(name = "Percentage hoogopgeleide", low = "#e8f5e9", high = "#1b5e20") +
+  scale_fill_gradient(name = "Percentage highly \neducated people", low = "#e8f5e9", high = "#1b5e20") +
   labs(
-    title   = "Simulated values by Dutch province"  ) +
+    title   = "Percentage of highly educated people \n by province in the Netherlands (2024)"  ) +
   theme_void() +
   theme(plot.title = element_text(hjust = 0.5, face = "bold"))
+
+ggsave("Graphs/map_high-education.png", map_high_education, width = 6, height = 10)
 ```
 
 ```{r}
-ggplot(nl_map) +
+map_lower_education <- ggplot(nl_map) +
   geom_sf(aes(fill = Percentage_laagopgeleide ), color = "white", linewidth = 0.4) +
-  scale_fill_gradient(name = "Percentage laagopgeleide", low = "#e8f5e9", high = "#1b5e20") +
+  scale_fill_gradient(name = "Percentage lower\n educated people \n(reversed)", high = "#e8f5e9", low = "#1b5e20") +
   labs(
-    title   = "Simulated values by Dutch province"  ) +
+    title   = "Percentage of lower educated people\n by province in the Netherlands (2024)"  ) +
   theme_void() +
   theme(plot.title = element_text(hjust = 0.5, face = "bold"))
+
+ggsave("Graphs/map_lower_education.png", map_lower_education, width = 6, height = 10)
 ```
 
 ```{r}
-ggplot(nl_map) +
+map_avg_income <- ggplot(nl_map) +
   geom_sf(aes(fill =  Gemiddeld_inkomen.x.1000.), color = "white", linewidth = 0.4) +
-  scale_fill_gradient(name = "Gemiddeld inkomen (x1000)", low = "#e8f5e9", high = "#1b5e20") +
+  scale_fill_gradient(name = "Average income \n(x1000)", low = "#e8f5e9", high = "#1b5e20") +
   labs(
-    title   = "Simulated values by Dutch province"  ) +
+    title   = "Average income by province\n in the Netherlands"  ) +
   theme_void() +
   theme(plot.title = element_text(hjust = 0.5, face = "bold"))
+
+ggsave("Graphs/map_avg_income.png", map_avg_income, width = 6, height = 10)
 ```
 
 Here you provide a description of why the plot above is relevant to your specific social problem.
@@ -361,10 +372,10 @@ What is the poverty rate by state?
 
 ```{r visualise_subpopulations}
 
-ggplot() +
+plot_men_vs_women <- ggplot() +
   geom_line(aes(x = perc_overgewicht[[1]],
                 y = perc_overgewicht[[2]],
-                color = "Overgewicht")) +
+                color = "Overweight")) +
   geom_line(aes(x = perc_overgewicht[[1]],
                 y = perc_overgewicht[[4]],
                 color = "Men")) +
@@ -377,16 +388,18 @@ ggplot() +
                  y = perc_overgewicht[[4]])) +
   geom_point(aes(x= perc_overgewicht[[1]],
               y = perc_overgewicht[[5]]))  +
-  scale_color_manual( values = c("Overgewicht" = "black",
+  scale_color_manual( values = c("Overweight" = "black",
                                  "Men" = "blue",
                                  "Women" = "deeppink")) +
   scale_x_continuous(breaks = seq(1980, 2025, by = 5)) +
   ylim(0,50) +
-  labs(title = "Percentage of overweight men compared to overweight woman over time",
+  labs(title = "Percentage of overweight men \ncompared to overweight woman over time (1981-2025)",
        x = "Year",
        y = "Percentage of people",
-       color = "group")
-
+       color = "group") +
+    theme(plot.title = element_text(hjust = 0.5))
+  
+ggsave("Graphs/plot_men_vs_women.png", plot_men_vs_women, width = 9, height = 6)
 ```
 Over the 44-year period shown, the percentage of overweight adults has always been higher among men than among women. Although this gap has shrunk in recent years, men still show a higher rates of overweight. furthermore, the percentage of overweight men and the percentage of overweight women have generally moved together over time. 
 
@@ -396,7 +409,7 @@ Over the 44-year period shown, the percentage of overweight adults has always be
 Analyze the relationship between two variables.
 
 ```{r analysis}
-ggplot() +
+plot_event <- ggplot() +
   geom_line(aes(x = perc_overgewicht[[1]],
                 y = perc_overgewicht[[2]],
                 color = "Overgewicht")) +
@@ -411,9 +424,12 @@ ggplot() +
   annotate("text", x = 2012, y = 30, size = 3, label = "Covenant overweight") +
   scale_x_continuous(breaks = seq(1980, 2025, by = 5)) +
   ylim(0,50) +
-  labs(title = "Percentage of overweight people over time in the Netherlands",
+  labs(title = "Percentage of overweight people\n over time in the Netherlands(1981-2025)",
        x = "Year",
-       y = "Percentage of people")
+       y = "Percentage of people") +
+    theme(plot.title = element_text(hjust = 0.5))
+  
+ggsave("Graphs/®plot_event.png", plot_event, width = 9, height = 6)
 
 ```
 
