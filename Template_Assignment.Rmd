@@ -6,6 +6,7 @@ output: pdf_document
 ---
 
 # Set-up your environment
+
 text
 
 ```{r package_install, include=FALSE}
@@ -13,7 +14,7 @@ text
 #install.packages("yaml")
 #install.packages("rmarkdown")
 #install.packages()
-install.packages("sf")   # alleen één keer nodig
+#install.packages("sf")   # alleen één keer nodig
 
 ```
 
@@ -59,7 +60,9 @@ This argues that obesity in the Netherlands should be viewed as a social problem
 
 
 
+- Overweightness in the Netherlands: A Social Problem Hidden in Plain Sight
 
+Walk through any Dutch city today and the numbers get to ignore. More than half of Dutch adults are overweight, one in six has obesity (Rijksinstituut voor Volksgezondheid en Milieu [RIVM], 2026), and if current trends continue, two in three people could be affected by 2050. What was once seen as a personal health issue has become a major social challenge. This became clear when Zorginstituut Nederland announced that bariatric surgery will now be covered by basic health insurance for teenagers aged 13 to 18 with severe obesity. Although only a small number of young people will qualify, the decision reflects growing recognition that lifestyle interventions alone are not always enough. To understand obesity, however, we must look beyond individual choices. In the Netherlands, obesity is strongly linked to social inequality. People with lower levels of education are significantly more likely to be overweight than university graduates (RIVM, 2026). Lower-income groups often have less access to healthy food, safe places to exercise, and supportive living environments. Research also shows that factors such as neighbourhood safety, green spaces, and social cohesion influence obesity rates.(OECD & European Observatory on Health Systems and Policies, 2025). The consequences extend beyond health. Obesity is associated with higher healthcare costs, lower earnings, increased sick leave, and reduced economic productivity. Children with obesity are more likely to face educational, social, and health disadvantages later in life. This argues that obesity in the Netherlands should be viewed as a social problem rather than simply a matter of personal responsibility. Addressing it effectively requires tackling the structural inequalities that make obesity more common among disadvantaged groups.
 
 # Part 2 - Data Sourcing
 
@@ -93,9 +96,6 @@ midwest is an example dataset included in the tidyverse package
 
 ```
 
-
-https://www.staatvenz.nl/kerncijfers/overgewicht-en-obesitas-volwassenen
-
 ``` r
 inline_code = TRUE
 ```
@@ -121,19 +121,14 @@ Say we want to include only larger distances (above 2) in our dataset, we can fi
 ```{r data_cleaning_1}
 overgewicht_1981 = overgewicht_over_tijd[1,5]
 overgewicht_2021 = overgewicht_over_tijd[10,5]
-
 ```
 
 ```{r data_cleaning_2}
-time_all_ages <- overgewicht_over_tijd[[4]][1:13]
-perc_overgewicht <- overgewicht_over_tijd[[5]][1:13]
-perc_obesitas <- overgewicht_over_tijd[[7]][1:13]
-perc_men <- overgewicht_over_tijd[[5]][40:52]
-perc_women <- overgewicht_over_tijd[[5]][79:91]
+perc_overgewicht <- full_join(overgewicht_over_tijd[1:13, c(4,5,7)], full_join(overgewicht_over_tijd[40:52, c(4,5)], overgewicht_over_tijd[79:91, c(4,5)], by = "Perioden"), by = "Perioden")
 ```
 
 ```{r data_cleaning_3}
-opleiding_provincie <- opleiding_dataset[c(1, 6:17),]
+opleiding_provincie <- opleiding_dataset[6:17,]
 
 hoogopgeleide_provincie <- data.frame(Regio = opleiding_provincie[[4]],
                           Percentage_hoogopgeleide = opleiding_provincie[[9]] + opleiding_provincie[[10]])
@@ -148,21 +143,12 @@ laagopgeleide_provincie <- data.frame(Regio = opleiding_provincie[[4]],
 ```
 
 ```{r data_cleaning_4}
-inkomen_provincie <- inkomen_dataset[1:13,]
-gemiddeld_inkomen <- data.frame(Regio = inkomen_provincie[[4]],
-                                "Gemiddeld_inkomen(x 1000)" = inkomen_provincie[[6]])
+gemiddeld_inkomen <- data.frame(Regio = inkomen_dataset[[4]][2:13],
+                                "Gemiddeld_inkomen(x 1000)" = inkomen_dataset[[6]][2:13])
 ```
 
 ```{r data_cleaning_4}
 data_regios <- gewicht_regios[grepl("\\(GG\\)", gewicht_regios[[3]] ), 3:12]
-```
-
-
-```{r data_mergen}
-opleidingsniveau_provincies <- full_join(full_join(laagopgeleide_provincie, middelopgeleide_provincie), hoogopgeleide_provincie)
-opleidingsniveau_provincies <- opleidingsniveau_provincies[2:13,]
-
-
 ```
 
 The dataset (data_regios) is built up in regions instead of provences. To compare this dataset to the other datasets, which are built up in provences, the regions need to be transformed into provences aswell. This is done with the following data from AlleCijfers.nl (AlleCijfers, 2026).
@@ -217,33 +203,32 @@ brabant_zuidoost <- 819169
 limburg_noord <- 537019
 limburg_zuid <- 601355
 
-nederland <- groningen + friesland + drenthe + ijsselland + twente +flevoland + noord_oost_gelderland + gelderland_midden + gelderland_zuid + utrecht + hollands_noorden + zaanstreek + kennemerland +amsterdam + gooi + haaglanden + hollands_midden + rotterdam + zuid_holland_zuid + zeeland + west_brabant + hart_brabant + brabant_zuidoost + limburg_noord + limburg_zuid
 ```
 
 ```{r}
-gezondheids_data_provincies <- rbind(Groningen = data_groningen <- data_analysis(groningen, data_regios[1, 2:10]),
+gezondheids_data_provincies <- rbind(Groningen  = data_analysis(groningen, data_regios[1, 2:10]),
 
-                              Fryslân = data_friesland <- data_analysis(friesland, data_regios[24, 2:10]),
+                              Fryslân = data_analysis(friesland, data_regios[24, 2:10]),
 
-                              Drenthe = data_drenthe <- data_analysis(drenthe , data_regios[2, 2:10]),
+                              Drenthe = data_analysis(drenthe , data_regios[2, 2:10]),
 
-                              Overijssel = data_overrijsel <- data_analysis(ijsselland, data_regios[3,2:10], twente, data_regios[4,2:10]),
+                              Overijssel = data_analysis(ijsselland, data_regios[3,2:10], twente, data_regios[4,2:10]),
 
-                              Flevoland = data_flevoland <- data_analysis(flevoland , data_regios[8, 2:10]),
+                              Flevoland = data_analysis(flevoland , data_regios[8, 2:10]),
       
-                              Gelderland = data_gelderland <- data_analysis(noord_oost_gelderland, data_regios[5, 2:10], gelderland_midden, data_regios[6, 2:10], gelderland_zuid, data_regios[7, 2:10]),
+                              Gelderland = data_analysis(noord_oost_gelderland, data_regios[5, 2:10], gelderland_midden, data_regios[6, 2:10], gelderland_zuid, data_regios[7, 2:10]),
                               
-                              Utrecht = data_utrecht <- data_analysis(utrecht, data_regios[9, 2:10]),
+                              Utrecht = data_analysis(utrecht, data_regios[9, 2:10]),
                               
-                              "Noord-Holland" = data_noord_holland <- data_analysis(hollands_noorden , data_regios[10, 2:10], zaanstreek, data_regios[25, 2:10], kennemerland, data_regios[11, 2:10], amsterdam, data_regios[12, 2:10], gooi, data_regios[13, 2:10]),
+                              "Noord-Holland" = data_analysis(hollands_noorden , data_regios[10, 2:10], zaanstreek, data_regios[25, 2:10], kennemerland, data_regios[11, 2:10], amsterdam, data_regios[12, 2:10], gooi, data_regios[13, 2:10]),
 
-                              "Zuid-Holland" = data_zuid_holland <- data_analysis(haaglanden, data_regios[23, 2:10], hollands_midden, data_regios[14, 2:10], rotterdam, data_regios[15, 2:10], zuid_holland_zuid, data_regios[16, 2:10]),
+                              "Zuid-Holland" = data_analysis(haaglanden, data_regios[23, 2:10], hollands_midden, data_regios[14, 2:10], rotterdam, data_regios[15, 2:10], zuid_holland_zuid, data_regios[16, 2:10]),
 
-                              Zeeland = data_zeeland <- data_analysis(zeeland , data_regios[17, 2:10]),
+                              Zeeland = data_analysis(zeeland , data_regios[17, 2:10]),
 
-                              "Noord-Brabant" = data_brabant <- data_analysis(west_brabant, data_regios[18, 2:10], hart_brabant, data_regios[19, 2:10], brabant_zuidoost, data_regios[20, 2:10]),
+                              "Noord-Brabant" = data_analysis(west_brabant, data_regios[18, 2:10], hart_brabant, data_regios[19, 2:10], brabant_zuidoost, data_regios[20, 2:10]),
 
-                              Limburg = data_limburg <- data_analysis(limburg_noord, data_regios[21, 2:10], limburg_zuid, data_regios[22, 2:10]))
+                              Limburg = data_analysis(limburg_noord, data_regios[21, 2:10], limburg_zuid, data_regios[22, 2:10]))
 
 gezondheids_data_provincies <- as.data.frame(gezondheids_data_provincies)
 
@@ -254,11 +239,33 @@ gezondheids_data_provincies <- gezondheids_data_provincies[, c("Provincie",
 ```
 
 ```{r}
-overgewicht_provincies <- gezondheids_data_provincies[c(1,4)]
-obesitas_provincies <- gezondheids_data_provincies[c(1,5)]
-names(overgewicht_provincies)[2] <- "overgewicht"
+names(gezondheids_data_provincies)[4] <- "Overgewicht"
+names(gezondheids_data_provincies)[names(gezondheids_data_provincies) == "Provincie"] <- "Regio"
 ```
 
+```{r data_mergen}
+name_change <- full_join(full_join(full_join(laagopgeleide_provincie, middelopgeleide_provincie), hoogopgeleide_provincie), gemiddeld_inkomen)
+
+```
+
+```{r}
+name_change[1,1] <- "Groningen"
+name_change[2,1] <- "Fryslân"
+name_change[3,1] <- "Drenthe"
+name_change[4,1] <- "Overijssel"
+name_change[5,1] <- "Flevoland"
+name_change[6,1] <- "Gelderland"
+name_change[7,1] <- "Utrecht"
+name_change[8,1] <- "Noord-Holland"
+name_change[9,1] <- "Zuid-Holland"
+name_change[10,1] <- "Zeeland"
+name_change[11,1] <- "Noord-Brabant"
+name_change[12,1] <- "Limburg"
+```
+
+```{r}
+dataset_map <- left_join(gezondheids_data_provincies[c(1, 4)], name_change)
+```
 
 Please use a separate 'R block' of code for each type of cleaning. So, e.g. one for missing values, a new one for removing unnecessary variables etc.
 
@@ -280,16 +287,16 @@ Variable 2
 
 ```{r}
 ggplot() +
-  geom_line(aes(x = time_all_ages,
-                y = perc_overgewicht,
+  geom_line(aes(x = perc_overgewicht[[1]],
+                y = perc_overgewicht[[2]],
                 color = "Overgewicht")) +
-  geom_line(aes(x = time_all_ages,
-                y = perc_obesitas,
+  geom_line(aes(x = perc_overgewicht[[1]],
+                y = perc_overgewicht[[3]],
                 color = "Obesitas")) +
-    geom_point(aes(x = time_all_ages,
-                 y = perc_overgewicht)) +
-  geom_point(aes(x = time_all_ages,
-                 y = perc_obesitas)) +
+    geom_point(aes(x = perc_overgewicht[[1]],
+                 y = perc_overgewicht[[2]])) +
+  geom_point(aes(x = perc_overgewicht[[1]],
+                 y = perc_overgewicht[[3]])) +
   scale_x_continuous(breaks = seq(1980, 2025, by = 5)) +
   ylim(0,50) +
   labs(title = "Percentage of overweight people over time in the Netherlands",
@@ -309,12 +316,12 @@ provinces <- st_read(paste0(
 
 provinces$statnaam 
 
-nl_map <- provinces |> left_join(overgewicht_provincies, by = c("statnaam" = "Provincie")) 
+nl_map <- provinces |> left_join(dataset_map, by = c("statnaam" = "Regio")) 
 
 
 ggplot(nl_map) +
-  geom_sf(aes(fill = overgewicht ), color = "white", linewidth = 0.4) +
-  scale_fill_gradient(name = "overgewicht", low = "#e8f5e9", high = "#1b5e20") +
+  geom_sf(aes(fill = Overgewicht ), color = "white", linewidth = 0.4) +
+  scale_fill_gradient(name = "Overgewicht", low = "#e8f5e9", high = "#1b5e20") +
   labs(
     title   = "Simulated values by Dutch province"  ) +
   theme_void() +
@@ -322,37 +329,29 @@ ggplot(nl_map) +
 ```
 
 ```{r}
-opleidingsniveau_provincies[1,1] <- "Groningen"
-opleidingsniveau_provincies[2,1] <- "Fryslân"
-opleidingsniveau_provincies[3,1] <- "Drenthe"
-opleidingsniveau_provincies[4,1] <- "Overijssel"
-opleidingsniveau_provincies[5,1] <- "Flevoland"
-opleidingsniveau_provincies[6,1] <- "Gelderland"
-opleidingsniveau_provincies[7,1] <- "Utrecht"
-opleidingsniveau_provincies[8,1] <- "Noord-Holland"
-opleidingsniveau_provincies[9,1] <- "Zuid-Holland"
-opleidingsniveau_provincies[10,1] <- "Zeeland"
-opleidingsniveau_provincies[11,1] <- "Noord-Brabant"
-opleidingsniveau_provincies[12,1] <- "Limburg"
-
-opleidingsniveau_provincies <- opleidingsniveau_provincies[c(1,4)]
+ ggplot(nl_map) +
+  geom_sf(aes(fill = Percentage_hoogopgeleide ), color = "white", linewidth = 0.4) +
+  scale_fill_gradient(name = "Percentage hoogopgeleide", low = "#e8f5e9", high = "#1b5e20") +
+  labs(
+    title   = "Simulated values by Dutch province"  ) +
+  theme_void() +
+  theme(plot.title = element_text(hjust = 0.5, face = "bold"))
 ```
 
 ```{r}
-provincie_map2 <- st_read(paste0(
-  "https://service.pdok.nl/cbs/gebiedsindelingen/2024/wfs/v1_0?",
-  "request=GetFeature&service=WFS&version=2.0.0",
-  "&typeName=provincie_gegeneraliseerd&outputFormat=application/json"
-))
+ggplot(nl_map) +
+  geom_sf(aes(fill = Percentage_laagopgeleide ), color = "white", linewidth = 0.4) +
+  scale_fill_gradient(name = "Percentage laagopgeleide", low = "#e8f5e9", high = "#1b5e20") +
+  labs(
+    title   = "Simulated values by Dutch province"  ) +
+  theme_void() +
+  theme(plot.title = element_text(hjust = 0.5, face = "bold"))
+```
 
-provincie_map2$statnaam 
-
-nl_map2 <- provincie_map2 |> left_join(opleidingsniveau_provincies, by = c("statnaam" = "Regio")) 
-
-
-ggplot(nl_map2) +
-  geom_sf(aes(fill = Percentage_hoogopgeleide ), color = "white", linewidth = 0.4) +
-  scale_fill_gradient(name = "percentage_hoogopgeleide", low = "#e8f5e9", high = "#1b5e20") +
+```{r}
+ggplot(nl_map) +
+  geom_sf(aes(fill =  Gemiddeld_inkomen.x.1000.), color = "white", linewidth = 0.4) +
+  scale_fill_gradient(name = "Gemiddeld inkomen (x1000)", low = "#e8f5e9", high = "#1b5e20") +
   labs(
     title   = "Simulated values by Dutch province"  ) +
   theme_void() +
@@ -368,27 +367,27 @@ What is the poverty rate by state?
 ```{r visualise_subpopulations}
 
 ggplot() +
-  geom_line(aes(x = time_all_ages,
-                y = perc_overgewicht,
+  geom_line(aes(x = perc_overgewicht[[1]],
+                y = perc_overgewicht[[2]],
                 color = "Overgewicht")) +
-  geom_line(aes(x = time_all_ages,
-                y = perc_men,
+  geom_line(aes(x = perc_overgewicht[[1]],
+                y = perc_overgewicht[[4]],
                 color = "Men")) +
-  geom_line(aes(x = time_all_ages,
-                y = perc_women,
+  geom_line(aes(x = perc_overgewicht[[1]],
+                y = perc_overgewicht[[5]],
                 color = "Women")) +
-  geom_point(aes(x = time_all_ages,
-                y = perc_overgewicht)) +
-  geom_point(aes(x = time_all_ages,
-                 y = perc_men)) +
-  geom_point(aes(x= time_all_ages,
-              y = perc_women))  +
+  geom_point(aes(x = perc_overgewicht[[1]],
+                y = perc_overgewicht[[2]])) +
+  geom_point(aes(x = perc_overgewicht[[1]],
+                 y = perc_overgewicht[[4]])) +
+  geom_point(aes(x= perc_overgewicht[[1]],
+              y = perc_overgewicht[[5]]))  +
   scale_color_manual( values = c("Overgewicht" = "black",
                                  "Men" = "blue",
                                  "Women" = "deeppink")) +
   scale_x_continuous(breaks = seq(1980, 2025, by = 5)) +
   ylim(0,50) +
-  labs(title = "Percentage of overweight people over time in the Netherlands",
+  labs(title = "Percentage of overweight men compared to overweight woman over time",
        x = "Year",
        y = "Percentage of people",
        color = "group")
@@ -403,16 +402,16 @@ Analyze the relationship between two variables.
 
 ```{r analysis}
 ggplot() +
-  geom_line(aes(x = time_all_ages,
-                y = perc_overgewicht,
+  geom_line(aes(x = perc_overgewicht[[1]],
+                y = perc_overgewicht[[2]],
                 color = "Overgewicht")) +
-  geom_line(aes(x = time_all_ages,
-                y = perc_obesitas,
+  geom_line(aes(x = perc_overgewicht[[1]],
+                y = perc_overgewicht[[3]],
                 color = "Obesitas")) +
-    geom_point(aes(x = time_all_ages,
-                 y = perc_overgewicht)) +
-  geom_point(aes(x = time_all_ages,
-                 y = perc_obesitas)) +
+    geom_point(aes(x = perc_overgewicht[[1]],
+                 y = perc_overgewicht[[2]])) +
+  geom_point(aes(x = perc_overgewicht[[1]],
+                 y = perc_overgewicht[[3]])) +
   geom_vline(xintercept = 2005, linetype = "dashed")+
   annotate("text", x = 2012, y = 30, size = 3, label = "Covenant overweight") +
   scale_x_continuous(breaks = seq(1980, 2025, by = 5)) +
