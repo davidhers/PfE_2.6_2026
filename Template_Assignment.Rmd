@@ -299,7 +299,7 @@ perc_over_time_plot = ggplot() +
        y = "Percentage of people") +
       theme(plot.title = element_text(hjust = 0.5))
 
-ggsave("Percentage_overgewicht_over_tijd.png", perc_over_time_plot, width = 9, height = 6)
+ggsave("Graphs/Percentage_overgewicht_over_tijd.png", perc_over_time_plot, width = 9, height = 6)
 ```
 
 ## 3.4 Visualize spatial variation
@@ -325,7 +325,7 @@ map_overweight <- ggplot(nl_map) +
   theme_void() +
   theme(plot.title = element_text(hjust = 0.5, face = "bold"))
 
-ggsave("map_overweight_people.png", map_overweight, width = 6, height = 10)
+ggsave("graphs/map_overweight_people.png", map_overweight, width = 6, height = 10)
 ```
 
 ```{r}
@@ -337,7 +337,7 @@ map_high_education <- ggplot(nl_map) +
   theme_void() +
   theme(plot.title = element_text(hjust = 0.5, face = "bold"))
 
-ggsave("map_high-education.png", map_high_education, width = 6, height = 10)
+ggsave("Graphs/map_high-education.png", map_high_education, width = 6, height = 10)
 ```
 
 ```{r}
@@ -349,7 +349,7 @@ map_lower_education <- ggplot(nl_map) +
   theme_void() +
   theme(plot.title = element_text(hjust = 0.5, face = "bold"))
 
-ggsave("map_lower_education.png", map_lower_education, width = 6, height = 10)
+ggsave("Graphs/map_lower_education.png", map_lower_education, width = 6, height = 10)
 ```
 
 ```{r}
@@ -361,7 +361,7 @@ map_avg_income <- ggplot(nl_map) +
   theme_void() +
   theme(plot.title = element_text(hjust = 0.5, face = "bold"))
 
-ggsave("map_avg_income.png", map_avg_income, width = 6, height = 10)
+ggsave("Graphs/map_avg_income.png", map_avg_income, width = 6, height = 10)
 ```
 
 Here you provide a description of why the plot above is relevant to your specific social problem.
@@ -399,7 +399,7 @@ plot_men_vs_women <- ggplot() +
        color = "group") +
     theme(plot.title = element_text(hjust = 0.5))
   
-ggsave("plot_men_vs_women.png", plot_men_vs_women, width = 9, height = 6)
+ggsave("Graphs/plot_men_vs_women.png", plot_men_vs_women, width = 9, height = 6)
 ```
 
 Here you provide a description of why the plot above is relevant to your specific social problem.
@@ -429,7 +429,7 @@ plot_event <- ggplot() +
        y = "Percentage of people") +
     theme(plot.title = element_text(hjust = 0.5))
   
-ggsave("plot_event.png", plot_event, width = 9, height = 6)
+ggsave("Graphs/®plot_event.png", plot_event, width = 9, height = 6)
 
 ```
 
