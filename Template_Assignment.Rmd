@@ -388,8 +388,8 @@ ggplot() +
        color = "group")
 
 ```
+Over the 44-year period shown, the percentage of overweight adults has always been higher among men than among women. Although this gap has shrunk in recent years, men still show a higher rates of overweight. furthermore, the percentage of overweight men and the percentage of overweight women have generally moved together over time. 
 
-Here you provide a description of why the plot above is relevant to your specific social problem.
 
 ## 3.6 Event analysis
 
@@ -417,7 +417,7 @@ ggplot() +
 
 ```
 
-Here you provide a description of why the plot above is relevant to your specific social problem.
+As shown in the graph, the percentage of overweight/obese people has increased at a relatively constant rate over time, with the exception of a  larger increase between 1995 and 2000. This rate does not appear to have changed from 2005 onwards. Consequently, no clear change can be observed following the introduction of the covenant on overweight and obesity, however based on the graph alone, it is not possible to determine whether the covenant had an effect. 
 
 # Part 4 - Discussion
 
