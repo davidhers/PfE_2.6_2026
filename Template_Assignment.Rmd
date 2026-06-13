@@ -29,7 +29,7 @@ library(sf)
 # Title Page
 
 Include your names
-David Hers
+David Hers, 2905659
 Norah Aalders, 2889433
 Casper Flipse, 2898924
 Sinem Göral, 2817932
@@ -128,17 +128,12 @@ perc_overgewicht <- full_join(overgewicht_over_tijd[1:13, c(4,5,7)], full_join(o
 ```
 
 ```{r data_cleaning_3}
-opleiding_provincie <- opleiding_dataset[6:17,]
-
-hoogopgeleide_provincie <- data.frame(Regio = opleiding_provincie[[4]],
-                          Percentage_hoogopgeleide = opleiding_provincie[[9]] + opleiding_provincie[[10]])
-
-middelopgeleide_provincie <- data.frame(Regio = opleiding_provincie[[4]],
-                            Percentage_middelopgeleide = opleiding_provincie[[8]])
-
-
-laagopgeleide_provincie <- data.frame(Regio = opleiding_provincie[[4]],
-                          Percentage_laagopgeleide = opleiding_provincie[[6]] + opleiding_provincie[[7]])
+opleiding_provincie <- data.frame("Regio" = opleiding_dataset[[4]][6:17],
+                                  "Percentage_laagopgeleide" = opleiding_dataset[[6]][6:17] + opleiding_dataset[[7]][6:17], 
+                                  "Percentage_middelopgeleide" = opleiding_dataset[[8]][6:17],
+                                  
+                                  "Percentage_hoogopgeleide" = opleiding_dataset[[9]][6:17] + opleiding_dataset[[10]][6:17]
+)
 
 ```
 
@@ -244,7 +239,7 @@ names(gezondheids_data_provincies)[names(gezondheids_data_provincies) == "Provin
 ```
 
 ```{r data_mergen}
-name_change <- full_join(full_join(full_join(laagopgeleide_provincie, middelopgeleide_provincie), hoogopgeleide_provincie), gemiddeld_inkomen)
+name_change <- full_join(opleiding_provincie, gemiddeld_inkomen)
 
 ```
 
