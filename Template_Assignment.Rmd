@@ -302,6 +302,8 @@ perc_over_time_plot = ggplot() +
 ggsave("Graphs/Percentage_overgewicht_over_tijd.png", perc_over_time_plot, width = 9, height = 6)
 ```
 
+As shown in the graph, the percentage of overweight/obese people has increased at a relatively constant rate over time, with the exception of a larger increase between 1995 and 2000.
+
 ## 3.4 Visualize spatial variation
 
 ```{r visualise_map}
@@ -364,7 +366,8 @@ map_avg_income <- ggplot(nl_map) +
 ggsave("Graphs/map_avg_income.png", map_avg_income, width = 6, height = 10)
 ```
 
-Here you provide a description of why the plot above is relevant to your specific social problem.
+As shown in the map representing hte perecentage of overweight and obese individuals, the provinces Utrecht, Noord-Holland, and Groningen appear to have the lowest prevalence rates. In contrast, Flevoland, Limburg and Drenthe have the highest percentage of overweight and obese residents. Furthermore a possible correlation can be found between overweight and obesity and educational level. The provinces with the lowest prevalence rates also have the highest level of education, whereas Flevoland and Drenthe, which have a relatively lower education level, show a higher percentage of overweight and obese residents. The level of income and overweight appear to have a weaker relationship. 
+
 
 ## 3.5 Visualize sub-population variation
 
@@ -406,7 +409,7 @@ Over the 44-year period shown, the percentage of overweight adults has always be
 
 ## 3.6 Event analysis
 
-Analyze the relationship between two variables.
+in 2005, the Dutch covenant overweight was introduced and signed by several organizations with the goal of preventing overweight and obesity. Here it is tested if the percentage of overweight and obese people has reduced since its introduction.
 
 ```{r analysis}
 plot_event <- ggplot() +
@@ -433,7 +436,7 @@ ggsave("Graphs/®plot_event.png", plot_event, width = 9, height = 6)
 
 ```
 
-As shown in the graph, the percentage of overweight/obese people has increased at a relatively constant rate over time, with the exception of a  larger increase between 1995 and 2000. This rate does not appear to have changed from 2005 onwards. Consequently, no clear change can be observed following the introduction of the covenant on overweight and obesity, however based on the graph alone, it is not possible to determine whether the covenant had an effect. 
+As shown in the temporal variation, the percentage of overweight/obese people has increased at a relatively constant rate over time. This rate does not appear to have changed from 2005 onwards. Consequently, no clear change can be observed following the introduction of the covenant on overweight and obesity, however based on the graph alone, it is not possible to determine whether the covenant had an effect. 
 
 # Part 4 - Discussion
 
