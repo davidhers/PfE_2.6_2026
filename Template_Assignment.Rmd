@@ -142,7 +142,7 @@ gemiddeld_inkomen <- data.frame(Regio = inkomen_dataset[[4]][2:13],
                                 "Gemiddeld_inkomen(x 1000)" = inkomen_dataset[[6]][2:13])
 ```
 
-```{r data_cleaning_4}
+```{r data_cleaning_5}
 data_regios <- gewicht_regios[grepl("\\(GG\\)", gewicht_regios[[3]] ), 3:12]
 ```
 
@@ -328,6 +328,7 @@ map_overweight <- ggplot(nl_map) +
   theme(plot.title = element_text(hjust = 0.5, face = "bold"))
 
 ggsave("graphs/map_overweight_people.png", map_overweight, width = 6, height = 10)
+
 ```
 
 ```{r}
