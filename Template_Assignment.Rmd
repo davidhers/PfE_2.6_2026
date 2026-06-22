@@ -1,20 +1,18 @@
 ---
 title: "Overweightness and SES"
-author: "Norah Aalders 2889433, Sinem Göral 2817932"
+author: "David Hers, 2905659 Norah Aalders, 2889433 Casper Flipse, 2898924 Sinem Göral, 2817932 Chris Kool, 2898107 Roel van Soelen, 2898917 "
 date: "`r Sys.Date()`"
 output: pdf_document
+Tutorial Lecturer: Fatima Amankour
 ---
-
-# Set-up your environment
-
-text
 
 ```{r package_install, include=FALSE}
 #install.packages("tidyverse")
 #install.packages("yaml")
 #install.packages("rmarkdown")
 #install.packages()
-#install.packages("sf")   # alleen één keer nodig
+#install.packages("sf")   
+#install.packages("patchwork")
 ```
 
 ```{r packages}
@@ -23,40 +21,18 @@ require(rmarkdown)
 require(yaml)
 library(readxl)
 library(sf)
-
+library(patchwork)
 ```
 
-# Title Page
+# Overweightness and SES
 
-Include your names David Hers, 2905659 Norah Aalders, 2889433 Casper Flipse, 2898924 Sinem Göral, 2817932 Chris Kool, 2898107 Roel van Soelen, 2898917
-
-Group 2.6
-
-Tutorial Lecturer: Fatima Amankour
-
-# Part 1 - Identify a Social Problem
-
-Use APA referencing throughout your document. [Here's a link to some explanation.](https://www.mendeley.com/guides/apa-citation-guide/)
-
-## 1.1 Describe the Social Problem
-
-Include the following:
-
-- Why is this relevant?
-
-- Overweightness in the Netherlands: A Social Problem Hidden in Plain Sight
+## 1 Overweightness in the Netherlands: A Social Problem Hidden in Plain Sight
 
 Walk through any Dutch city today and the numbers get to ignore. More than half of Dutch adults are overweight, one in six has obesity (Rijksinstituut voor Volksgezondheid en Milieu [RIVM], 2026), and if current trends continue, two in three people could be affected by 2050. What was once seen as a personal health issue has become a major social challenge. This became clear when Zorginstituut Nederland announced that bariatric surgery will now be covered by basic health insurance for teenagers aged 13 to 18 with severe obesity. Although only a small number of young people will qualify, the decision reflects growing recognition that lifestyle interventions alone are not always enough. To understand obesity, however, we must look beyond individual choices. In the Netherlands, obesity is strongly linked to social inequality. People with lower levels of education are significantly more likely to be overweight than university graduates (RIVM, 2026). Lower-income groups often have less access to healthy food, safe places to exercise, and supportive living environments. Research also shows that factors such as neighbourhood safety, green spaces, and social cohesion influence obesity rates.(OECD & European Observatory on Health Systems and Policies, 2025). The consequences extend beyond health. Obesity is associated with higher healthcare costs, lower earnings, increased sick leave, and reduced economic productivity. Children with obesity are more likely to face educational, social, and health disadvantages later in life. This argues that obesity in the Netherlands should be viewed as a social problem rather than simply a matter of personal responsibility. Addressing it effectively requires tackling the structural inequalities that make obesity more common among disadvantaged groups.
 
-- Overweightness in the Netherlands: A Social Problem Hidden in Plain Sight
+## 2 Data
 
-Walk through any Dutch city today and the numbers get to ignore. More than half of Dutch adults are overweight, one in six has obesity (Rijksinstituut voor Volksgezondheid en Milieu [RIVM], 2026), and if current trends continue, two in three people could be affected by 2050. What was once seen as a personal health issue has become a major social challenge. This became clear when Zorginstituut Nederland announced that bariatric surgery will now be covered by basic health insurance for teenagers aged 13 to 18 with severe obesity. Although only a small number of young people will qualify, the decision reflects growing recognition that lifestyle interventions alone are not always enough. To understand obesity, however, we must look beyond individual choices. In the Netherlands, obesity is strongly linked to social inequality. People with lower levels of education are significantly more likely to be overweight than university graduates (RIVM, 2026). Lower-income groups often have less access to healthy food, safe places to exercise, and supportive living environments. Research also shows that factors such as neighbourhood safety, green spaces, and social cohesion influence obesity rates.(OECD & European Observatory on Health Systems and Policies, 2025). The consequences extend beyond health. Obesity is associated with higher healthcare costs, lower earnings, increased sick leave, and reduced economic productivity. Children with obesity are more likely to face educational, social, and health disadvantages later in life. This argues that obesity in the Netherlands should be viewed as a social problem rather than simply a matter of personal responsibility. Addressing it effectively requires tackling the structural inequalities that make obesity more common among disadvantaged groups.
-
-# Part 2 - Data Sourcing
-
-## 2.1 Load in the data
-
-Preferably from a URL, but if not, make sure to download the data and store it in a shared location that you can load the data in from. Do not store the data in a folder you include in the Github repository!
+## 2.1 Loading in data.
 
 ```{r loading_data}
 gewicht_regios <- read_xlsx("data/Gezondheidsmonitor__regio__2024_04062026_114221.xlsx")
@@ -71,45 +47,51 @@ saveRDS(inkomen_dataset, "data/inkomen_dataset.rds")
 opleiding_dataset <- read_xlsx("data/Onderwijs_per_provincie.xlsx")
 saveRDS(opleiding_dataset, "data/opleiding_dataset.rds")
 
+gewicht_regios <- readRDS("data/gewicht_regios.rds")
+overgewicht_over_tijd <- readRDS("data/overgewicht_over_tijd.rds")
+inkomen_dataset <- readRDS("data/inkomen_dataset.rds")
+opleiding_dataset <- readRDS("data/opleiding_dataset.rds")
 
+#loading in the data and saving it as an RDS so that they will not be lost.
 ```
 
-``` r
-inline_code = TRUE
-```
+## 2.2 Explanation data
 
 In this project, we utilize two datasets released by CBS (Statistics Netherlands) that collectively offer insight into the health of the Dutch population. The initial dataset, Gezondheidsmonitor; adults 18 years and older, region, 2024, centers on individuals aged 18 and above residing in the Netherlands. CBS compiled it in partnership with the National Institute for Public Health and the Environment (RIVM) and the local Public Health Services (GGDs). The data collection provides insights into health conditions, lifestyle choices, and social elements across various geographical tiers, such as municipalities, GGD regions, provinces, and at the national level. Essential indicators consist of self-assessed health, rates of chronic diseases, overweight and obesity, levels of physical exercise, involvement in sports, tobacco use, alcohol intake, and informal caregiving. The information is primarily shown as percentages of the adult demographic and offers a comprehensive regional overview of health and wellness in 2024.The second dataset, Lengte en gewicht van personen, ondergewicht en overgewicht; vanaf 1981, provides a longitudinal view of body weight and obesity trends in the Netherlands. This dataset includes individuals aged four and older and monitors trends from 1981 to 2025. It contains data regarding body mass index (BMI), moderate overweight, obesity, and underweight, categorized by age group, gender, and year. The data relies on self-reported weight and height, which CBS utilizes to determine BMI categories. In contrast to the initial dataset that highlights regional variations for one year, this dataset offers a national time series enabling researchers to explore changes in overweight and obesity across more than forty years.
 
 Collectively, these datasets enhance each other effectively. The Health Monitor dataset offers an in-depth view of regional health disparities in 2024, whereas the height and weight dataset uncovers enduring national patterns of overweight and obesity. Integrating information from both sources allows for a clearer comprehension of obesity's prevalence in the Netherlands, its regional variations, and its historical trends.
 
-These are things that are usually included in the metadata of the dataset. For your project, you need to provide us with the information from your metadata that we need to understand your dataset of choice.
-
-## 2.3 Describe the type of variables included
-
-Think of things like:
-
-- Do the variables contain health information or SES information?
-
-- Have they been measured by interviewing individuals or is the data coming from administrative sources?
-
-*For the sake of this example, I will continue with the assignment...*
-
 # Part 3 - Quantifying
 
 ## 3.1 Data cleaning
 
-Say we want to include only larger distances (above 2) in our dataset, we can filter for this.
-
 ```{r data_cleaning_1}
 overgewicht_1981 = overgewicht_over_tijd[1,5]
-overgewicht_2021 = overgewicht_over_tijd[10,5]
+overgewicht_2025 = overgewicht_over_tijd[13,5]
+
 ```
+
+Selecting data for making the variable for the percentage change over time (later in the PDF)
 
 ```{r data_cleaning_2}
 perc_overgewicht <- full_join(overgewicht_over_tijd[1:13, c(4,5,7)], full_join(overgewicht_over_tijd[40:52, c(4,5)], overgewicht_over_tijd[79:91, c(4,5)], by = "Perioden"), by = "Perioden")
+
 ```
 
+Full joining by "Perioden" to make one data set of all the necessary data with the same left column, the year it was in. The data is the year, percentage of total overweight people in the Netherlands, percentage of obesity in the Netherlands, percentage of overweight men and lastly percentage of overweight women in the Netherlands.
+
 ```{r data_cleaning_3}
+list_perc_point_change <-  numeric(12)
+for (i in 1:12) {
+  list_perc_point_change[i] <- perc_overgewicht[[2]][i + 1] - perc_overgewicht[[2]][i]
+} 
+
+perc_overgewicht$Percentage_difference <- c(NA, list_perc_point_change)
+```
+
+To the dataset the percentage point change of overweight people compared to the last datapoint is added. Since there is no percentage point change for the first datapoint, NA gets added there. This will be used for the last plot.
+
+```{r data_cleaning_4}
 opleiding_provincie <- data.frame("Regio" = opleiding_dataset[[4]][6:17],
                                   "Percentage_laagopgeleide" = opleiding_dataset[[6]][6:17] + opleiding_dataset[[7]][6:17], 
                                   "Percentage_middelopgeleide" = opleiding_dataset[[8]][6:17],
@@ -119,28 +101,22 @@ opleiding_provincie <- data.frame("Regio" = opleiding_dataset[[4]][6:17],
 
 ```
 
-```{r data_cleaning_4}
+The education levels dataset of the Netherlands consists of 6 different columns that are used. First, completely on the left, the provences, because this is what will be used later, To get the data we want to use 2 new variables need to be created, firstly the sixth and seventh column need to be added together, to create the percentage of 'lower educated' people in the Netherlands, and then the ninth and tenth column need to be added to get the percentage of 'higher educated' people in the Netherlands. This get combined into one dataset with data.frame with the percentage of 'middle educated' people in the Netherlands. Only rows 6 till 17 are used, because this is the data of the different provences in the Netherlands.
+
+```{r data_cleaning_5}
 gemiddeld_inkomen <- data.frame(Regio = inkomen_dataset[[4]][2:13],
                                 "Gemiddeld_inkomen(x 1000)" = inkomen_dataset[[6]][2:13])
 ```
 
-```{r data_cleaning_5}
+The income dataset is used in a similar way as the education levels dataset. A new data set gets created with data.frame, on the left again the provences, called "Regio", or region in english. Next to that the income of said provence divided by 1000 is there. 
+
+```{r data_cleaning_6}
 data_regios <- gewicht_regios[grepl("\\(GG\\)", gewicht_regios[[3]] ), 3:12] 
 ```
 
+the last dataset that was loaded in is divided in GGD regions instead of provences, because that is how the data is collected. In this dataset there is also differerent data of other regions which are not needed. The GGD data that is needed has GG in the names. the line "gewicht_regios[grepl("\\(GG\\)", gewicht_regios[[3]] ), 3:12]" selects that data so that it can be used in the coming chunks. 
+
 The dataset (data_regios) is built up in regions instead of provences. To compare this dataset to the other datasets, which are built up in provences, the regions need to be transformed into provences aswell. This is done with the following data from AlleCijfers.nl (AlleCijfers, 2026).
-
-```{r data_cleaning_function}
-
-data_analysis <- function(regio1 = 0, data1 = 0, regio2 = 0, data2 = 0, regio3 = 0, data3 = 0, regio4 = 0, data4 = 0, regio5 = 0,  data5 = 0){
-  totaal_provincie <- regio1 + regio2 + regio3 + regio4
-  data_provincie <- ((regio1 / totaal_provincie) * data1) + ((regio2 / totaal_provincie) * data2) + ((regio3 / totaal_provincie) * data3) + ((regio4 / totaal_provincie) * data4)  
-  
-  return(data_provincie)
-  
-}
-
-```
 
 ```{r data_GGD_regions(AlleCijfers, 2026)}
 groningen <- 601286
@@ -181,6 +157,20 @@ limburg_noord <- 537019
 limburg_zuid <- 601355
 
 ```
+
+```{r data_cleaning_function}
+
+data_analysis <- function(regio1 = 0, data1 = 0, regio2 = 0, data2 = 0, regio3 = 0, data3 = 0, regio4 = 0, data4 = 0, regio5 = 0,  data5 = 0){
+  totaal_provincie <- regio1 + regio2 + regio3 + regio4
+  data_provincie <- ((regio1 / totaal_provincie) * data1) + ((regio2 / totaal_provincie) * data2) + ((regio3 / totaal_provincie) * data3) + ((regio4 / totaal_provincie) * data4)  
+  
+  return(data_provincie)
+  
+}
+
+```
+
+The function above is created to calculate a new variable, the percentage of overweight people in the provinces instead of the percentage of overweight people in GGD regions. These GGD regions are always in one province, making it fairly easy to calculate the percentage of the provinces. These provinces are made up of different amount of GGD regions, so the input data is standardized to zero for everything, so that one to five different factors can be given without the function giving an error. This then returns the percentage of overweight people in the province by the formula in the chunk.
 
 ```{r}
 gezondheids_data_provincies <- rbind(Groningen  = data_analysis(groningen, data_regios[1, 2:10]),
@@ -252,8 +242,8 @@ Variable 1
 
 ```{r gen_var1}
 proc_ver_overgewicht = ((overgewicht_2021 - overgewicht_1981) / overgewicht_1981) * 100
+proc_ver_overgewicht
 ```
-
 
 ## 3.3 Visualize temporal variation
 
@@ -297,8 +287,6 @@ provincies_kaart$statnaam
 nl_map <- provincies_kaart |> left_join(dataset_map, by = c("statnaam" = "Regio")) 
 
 ```
-
-
 
 ```{r}
 combined_plot <-
@@ -395,18 +383,25 @@ in 2005, the Dutch covenant overweight was introduced and signed by several orga
 plot_event <- ggplot() +
   geom_line(aes(x = perc_overgewicht[[1]],
                 y = perc_overgewicht[[2]],
-                color = "Overgewicht \n(BMI > 25)")) +
+                color = "Overweight \n(BMI > 25)")) +
   geom_line(aes(x = perc_overgewicht[[1]],
                 y = perc_overgewicht[[3]],
-                color = "Obesitas \n(BMI > 30)")) +
+                color = "Obesity \n(BMI > 30)")) +
+  geom_line(aes(x = perc_overgewicht[[1]],
+                y = perc_overgewicht[[6]],
+              color = "Percentage point change\ncompared to last data point \n(of the percentage of overweight people)"),
+              na.rm = TRUE) +
     geom_point(aes(x = perc_overgewicht[[1]],
                  y = perc_overgewicht[[2]])) +
   geom_point(aes(x = perc_overgewicht[[1]],
                  y = perc_overgewicht[[3]])) +
+  geom_point(aes(x = perc_overgewicht[[1]],
+                y = perc_overgewicht[[6]]),
+              na.rm = TRUE) +
   geom_vline(xintercept = 2005, linetype = "dashed")+
   annotate("text", x = 2012, y = 30, size = 3, label = "Covenant overweight") +
   scale_x_continuous(breaks = seq(1980, 2025, by = 5)) +
-  ylim(0,50) +
+  ylim(-5,50) +
   labs(title = "Percentage of overweight people\n over time in the Netherlands(1981-2025)",
        x = "Year",
        y = "Percentage of people") +
@@ -416,7 +411,7 @@ ggsave("Graphs/®plot_event.png", plot_event, width = 9, height = 6)
 plot_event
 ```
 
-As shown in the temporal variation, the percentage of overweight/obese people has increased at a relatively constant rate over time. This rate does not appear to have changed from 2005 onwards. Consequently, no clear change can be observed following the introduction of the covenant on overweight and obesity, however based on the graph alone, it is not possible to determine whether the covenant had an effect.
+As shown in the temporal variation, the percentage of overweight/obese people has increased at a relatively constant rate over time. This rate seems a to have slowed down a little from 2005 onwards in absolute terms, but this could be due to multiple reasons. Consequently, it is hard to determine a clear change following the introduction of the covenant on overweight and obesity, but an argument could be made that it did make a change.
 
 # Part 4 - Discussion
 
