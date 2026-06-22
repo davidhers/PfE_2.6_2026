@@ -89,7 +89,7 @@ for (i in 1:12) {
 perc_overgewicht$Percentage_difference <- c(NA, list_perc_point_change)
 ```
 
-To the dataset the percentage point change of overweight people compared to the last datapoint is added. Since there is no percentage point change for the first datapoint, NA gets added there. This will be used for the last plot.
+To the dataset the percentage point change of overweight people compared to the last datapoint is added. Since there is no percentage point change for the first datapoint, NA gets added there. This will be used for the last plot. This is the first final dataset.
 
 ```{r data_cleaning_4}
 opleiding_provincie <- data.frame("Regio" = opleiding_dataset[[4]][6:17],
@@ -101,22 +101,22 @@ opleiding_provincie <- data.frame("Regio" = opleiding_dataset[[4]][6:17],
 
 ```
 
-The education levels dataset of the Netherlands consists of 6 different columns that are used. First, completely on the left, the provences, because this is what will be used later, To get the data we want to use 2 new variables need to be created, firstly the sixth and seventh column need to be added together, to create the percentage of 'lower educated' people in the Netherlands, and then the ninth and tenth column need to be added to get the percentage of 'higher educated' people in the Netherlands. This get combined into one dataset with data.frame with the percentage of 'middle educated' people in the Netherlands. Only rows 6 till 17 are used, because this is the data of the different provences in the Netherlands.
+The education levels dataset of the Netherlands consists of 6 different columns that are used. First, completely on the left, the provinces, because this is what will be used later, To get the data we want to use 2 new variables need to be created, firstly the sixth and seventh column need to be added together, to create the percentage of 'lower educated' people in the Netherlands, and then the ninth and tenth column need to be added to get the percentage of 'higher educated' people in the Netherlands. This get combined into one dataset with data.frame with the percentage of 'middle educated' people in the Netherlands. Only rows 6 till 17 are used, because this is the data of the different provinces in the Netherlands.
 
 ```{r data_cleaning_5}
 gemiddeld_inkomen <- data.frame(Regio = inkomen_dataset[[4]][2:13],
                                 "Gemiddeld_inkomen(x 1000)" = inkomen_dataset[[6]][2:13])
 ```
 
-The income dataset is used in a similar way as the education levels dataset. A new data set gets created with data.frame, on the left again the provences, called "Regio", or region in english. Next to that the income of said provence divided by 1000 is there. 
+The income dataset is used in a similar way as the education levels dataset. A new data set gets created with data.frame, on the left again the provinces, called "Regio", or region in english. Next to that the average income per person of said province divided by 1000 is there.
 
 ```{r data_cleaning_6}
 data_regios <- gewicht_regios[grepl("\\(GG\\)", gewicht_regios[[3]] ), 3:12] 
 ```
 
-the last dataset that was loaded in is divided in GGD regions instead of provences, because that is how the data is collected. In this dataset there is also differerent data of other regions which are not needed. The GGD data that is needed has GG in the names. the line "gewicht_regios[grepl("\\(GG\\)", gewicht_regios[[3]] ), 3:12]" selects that data so that it can be used in the coming chunks. 
+the last dataset that was loaded in is divided in GGD regions instead of provinces, because that is how the data is collected. In this dataset there is also differerent data of other regions which are not needed. The GGD data that is needed has GG in the names. the line "gewicht_regios[grepl("\\(GG\\)", gewicht_regios[[3]] ), 3:12]" selects that data so that it can be used in the coming chunks.
 
-The dataset (data_regios) is built up in regions instead of provences. To compare this dataset to the other datasets, which are built up in provences, the regions need to be transformed into provences aswell. This is done with the following data from AlleCijfers.nl (AlleCijfers, 2026).
+The dataset (data_regios) is built up in regions instead of provinces. To compare this dataset to the other datasets, which are built up in provinces, the regions need to be transformed into provinces aswell. This is done with the following data from AlleCijfers.nl (AlleCijfers, 2026).
 
 ```{r data_GGD_regions(AlleCijfers, 2026)}
 groningen <- 601286
@@ -205,15 +205,21 @@ gezondheids_data_provincies <- gezondheids_data_provincies[, c("Provincie",
                                                                setdiff(names(gezondheids_data_provincies), "Provincie"))]
 ```
 
+A new dataset gets created, with the function from before. Every name is in a very specific way to merge it into a bigger dataset for the different maps that need to be created. This is also the explanation for line 200 to 205, to merge with columnname "provincie".
+
 ```{r}
 data_overweight_provence <- data.frame(Regio = gezondheids_data_provincies[[1]],
   Overgewicht = gezondheids_data_provincies[[4]] + gezondheids_data_provincies[[5]])
 ```
 
+The complete dataset that was created above this, is cut down to only the necessary information, the percentage of overweight people, the sum of column 4 and 5.
+
 ```{r data_mergen}
 name_change <- full_join(opleiding_provincie, gemiddeld_inkomen)
 
 ```
+
+The dataset of education level and average income do not have the right name yet for their left column to merge them later on. So, they get combined into one dataset so their names of provinces can be changed in one go, which is done below this.
 
 ```{r}
 name_change[1,1] <- "Groningen"
@@ -234,16 +240,16 @@ name_change[12,1] <- "Limburg"
 dataset_map <- left_join(data_overweight_provence, name_change)
 ```
 
-Please use a separate 'R block' of code for each type of cleaning. So, e.g. one for missing values, a new one for removing unnecessary variables etc.
-
-## 3.2 Generate necessary variables
+Now these dataset can be merged into one complete dataset, the second final dataset.
 
 Variable 1
 
 ```{r gen_var1}
-proc_ver_overgewicht = ((overgewicht_2021 - overgewicht_1981) / overgewicht_1981) * 100
+proc_ver_overgewicht = ((overgewicht_2025 - overgewicht_1981) / overgewicht_1981) * 100
 proc_ver_overgewicht
 ```
+
+To show the importance of this research, the percentage change of overweight people in the Netherlands is calculated over 44 years, which is 63.5 percent. This is obviously a huge increase which need to be adressed and more attention given to.
 
 ## 3.3 Visualize temporal variation
 
@@ -255,7 +261,7 @@ perc_over_time_plot = ggplot() +
   geom_line(aes(x = perc_overgewicht[[1]],
                 y = perc_overgewicht[[3]],
                 color = "Obesity  \n(BMI > 30)")) +
-    geom_point(aes(x = perc_overgewicht[[1]],
+  geom_point(aes(x = perc_overgewicht[[1]],
                  y = perc_overgewicht[[2]])) +
   geom_point(aes(x = perc_overgewicht[[1]],
                  y = perc_overgewicht[[3]])) +
@@ -269,6 +275,8 @@ perc_over_time_plot = ggplot() +
 ggsave("Graphs/Percentage_overgewicht_over_tijd.png", perc_over_time_plot, width = 9, height = 6)
 
 perc_over_time_plot
+
+#A plot gets created with ggplot, which gets saved with ggsave. geom_line and geom_point get used to create a clear plot, with scale_x_continuous the x axis values get determined. 
 ```
 
 As shown in the graph, the percentage of overweight/obese people has increased at a relatively constant rate over time, with the exception of a larger increase between 1995 and 2000.
@@ -286,6 +294,7 @@ provincies_kaart$statnaam
 
 nl_map <- provincies_kaart |> left_join(dataset_map, by = c("statnaam" = "Regio")) 
 
+#One dataset gets merged with the provinces map of the Netherlands, to make 4 different maps to compare them. 
 ```
 
 ```{r}
@@ -332,7 +341,11 @@ ggsave(
   height = 12,
   dpi = 300
 )
+
+#The dataset for the maps gets used for four different plots. These get combined into on big plot. (This plot down below does not show it right, but if you open the file, the graphs map and then open the maps_comparison.png it does look how it should look.)
 ```
+
+In the top left and down right, the data is reversed. This is done because this makes comparing the different maps easier and a lot more obvious.
 
 As shown in the map representing the perecentage of overweight and obese individuals, the provinces Utrecht, Noord-Holland, and Groningen appear to have the lowest prevalence rates. In contrast, Flevoland, Limburg and Drenthe have the highest percentage of overweight and obese residents. Furthermore a possible correlation can be found between overweight and obesity and educational level. The provinces with the lowest prevalence rates also have the highest level of education, whereas Flevoland and Drenthe, which have a relatively lower education level, show a higher percentage of overweight and obese residents. The level of income and overweight appear to have a weaker relationship.
 
@@ -371,6 +384,7 @@ plot_men_vs_women <- ggplot() +
   
 ggsave("Graphs/plot_men_vs_women.png", plot_men_vs_women, width = 9, height = 6)
 plot_men_vs_women
+
 ```
 
 Over the 44-year period shown, the percentage of overweight adults has always been higher among men than among women. Although this gap has shrunk in recent years, men still show a higher rates of overweight. furthermore, the percentage of overweight men and the percentage of overweight women have generally moved together over time.
