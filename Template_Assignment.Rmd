@@ -15,7 +15,6 @@ text
 #install.packages("rmarkdown")
 #install.packages()
 #install.packages("sf")   # alleen één keer nodig
-
 ```
 
 ```{r packages}
@@ -24,6 +23,7 @@ require(rmarkdown)
 require(yaml)
 library(readxl)
 library(sf)
+
 ```
 
 # Title Page
@@ -146,7 +146,7 @@ gemiddeld_inkomen <- data.frame(Regio = inkomen_dataset[[4]][2:13],
 ```
 
 ```{r data_cleaning_5}
-data_regios <- gewicht_regios[grepl("\\(GG\\)", gewicht_regios[[3]] ), 3:12]
+data_regios <- gewicht_regios[grepl("\\(GG\\)", gewicht_regios[[3]] ), 3:12] 
 ```
 
 The dataset (data_regios) is built up in regions instead of provences. To compare this dataset to the other datasets, which are built up in provences, the regions need to be transformed into provences aswell. This is done with the following data from AlleCijfers.nl (AlleCijfers, 2026).
@@ -237,9 +237,10 @@ gezondheids_data_provincies <- gezondheids_data_provincies[, c("Provincie",
 ```
 
 ```{r}
-names(gezondheids_data_provincies)[4] <- "Overgewicht"
-names(gezondheids_data_provincies)[names(gezondheids_data_provincies) == "Provincie"] <- "Regio"
+data_overweight_provence <- data.frame(Regio = gezondheids_data_provincies[[1]],
+  Overgewicht = gezondheids_data_provincies[[4]] + gezondheids_data_provincies[[5]])
 ```
+
 
 ```{r data_mergen}
 name_change <- full_join(opleiding_provincie, gemiddeld_inkomen)
@@ -262,7 +263,7 @@ name_change[12,1] <- "Limburg"
 ```
 
 ```{r}
-dataset_map <- left_join(gezondheids_data_provincies[c(1, 4)], name_change)
+dataset_map <- left_join(data_overweight_provence, name_change)
 ```
 
 Please use a separate 'R block' of code for each type of cleaning. So, e.g. one for missing values, a new one for removing unnecessary variables etc.
@@ -284,19 +285,17 @@ Variable 2
 ## 3.3 Visualize temporal variation
 
 ```{r}
-#the following lines of code make the lines and the plot.
 perc_over_time_plot = ggplot() +
   geom_line(aes(x = perc_overgewicht[[1]],
                 y = perc_overgewicht[[2]],
-                color = "Overweight")) +
+                color = "Overweight \n(BMI > 25)")) +
   geom_line(aes(x = perc_overgewicht[[1]],
                 y = perc_overgewicht[[3]],
-                color = "Obesity")) +
+                color = "Obesity  \n(BMI > 30)")) +
     geom_point(aes(x = perc_overgewicht[[1]],
                  y = perc_overgewicht[[2]])) +
   geom_point(aes(x = perc_overgewicht[[1]],
                  y = perc_overgewicht[[3]])) +
-  #The remaining code in this chunk defines the layout of the graph. This includes x and y-axis and the labels.
   scale_x_continuous(breaks = seq(1980, 2025, by = 5)) +
   ylim(0,50) +
   labs(title = "Percentage of overweight people\n over time in the Netherlands (1981-2025)",
@@ -305,9 +304,11 @@ perc_over_time_plot = ggplot() +
       theme(plot.title = element_text(hjust = 0.5))
 
 ggsave("Graphs/Percentage_overgewicht_over_tijd.png", perc_over_time_plot, width = 9, height = 6)
+
+perc_over_time_plot
 ```
 
-The graph reveals that the percentage of overweight/obese people has increased at a relatively constant rate over time, with the exception of a larger increase between 1995 and 2000.
+As shown in the graph, the percentage of overweight/obese people has increased at a relatively constant rate over time, with the exception of a larger increase between 1995 and 2000.
 
 ## 3.4 Visualize spatial variation
 
@@ -325,7 +326,7 @@ nl_map <- provincies_kaart |> left_join(dataset_map, by = c("statnaam" = "Regio"
 
 map_overweight <- ggplot(nl_map) +
   geom_sf(aes(fill = Overgewicht ), color = "white", linewidth = 0.4) +
-  scale_fill_gradient(name = "Percentage of \noverweight people \n(reversed)", high = "#e8f5e9", 
+  scale_fill_gradient(name = "Percentage of \noverweight people \n(BMI > 25)\n(data reversed)", high = "#e8f5e9", 
   low = "#1b5e20") +
   labs(
     title   = "Percentage of overweight people\n by province in the Netherlands (2024)"  ) +
@@ -333,7 +334,6 @@ map_overweight <- ggplot(nl_map) +
   theme(plot.title = element_text(hjust = 0.5, face = "bold"))
 
 ggsave("graphs/map_overweight_people.png", map_overweight, width = 6, height = 10)
-
 ```
 
 ```{r}
@@ -351,7 +351,7 @@ ggsave("Graphs/map_high-education.png", map_high_education, width = 6, height = 
 ```{r}
 map_lower_education <- ggplot(nl_map) +
   geom_sf(aes(fill = Percentage_laagopgeleide ), color = "white", linewidth = 0.4) +
-  scale_fill_gradient(name = "Percentage lower\n educated people \n(reversed)", high = "#e8f5e9", low = "#1b5e20") +
+  scale_fill_gradient(name = "Percentage lower\n educated people \n(data reversed)", high = "#e8f5e9", low = "#1b5e20") +
   labs(
     title   = "Percentage of lower educated people\n by province in the Netherlands (2024)"  ) +
   theme_void() +
@@ -372,7 +372,7 @@ map_avg_income <- ggplot(nl_map) +
 ggsave("Graphs/map_avg_income.png", map_avg_income, width = 6, height = 10)
 ```
 
-As shown in the map representing the perecentage of overweight and obese individuals, the provinces Utrecht, Noord-Holland, and Groningen appear to have the lowest prevalence rates. In contrast, Flevoland, Limburg and Drenthe have the highest percentage of overweight and obese residents. Furthermore a possible correlation can be found between overweight and obesity and educational level. The provinces with the lowest prevalence rates also have the highest level of education, whereas Flevoland and Drenthe, which have a relatively lower education level, show a higher percentage of overweight and obese residents. The level of income and overweight appear to have a weaker relationship. 
+As shown in the map representing hte perecentage of overweight and obese individuals, the provinces Utrecht, Noord-Holland, and Groningen appear to have the lowest prevalence rates. In contrast, Flevoland, Limburg and Drenthe have the highest percentage of overweight and obese residents. Furthermore a possible correlation can be found between overweight and obesity and educational level. The provinces with the lowest prevalence rates also have the highest level of education, whereas Flevoland and Drenthe, which have a relatively lower education level, show a higher percentage of overweight and obese residents. The level of income and overweight appear to have a weaker relationship. 
 
 
 ## 3.5 Visualize sub-population variation
@@ -380,7 +380,7 @@ As shown in the map representing the perecentage of overweight and obese individ
 What is the poverty rate by state?
 
 ```{r visualise_subpopulations}
-#the following lines of code make the lines and the plot.
+
 plot_men_vs_women <- ggplot() +
   geom_line(aes(x = perc_overgewicht[[1]],
                 y = perc_overgewicht[[2]],
@@ -397,20 +397,19 @@ plot_men_vs_women <- ggplot() +
                  y = perc_overgewicht[[4]])) +
   geom_point(aes(x= perc_overgewicht[[1]],
               y = perc_overgewicht[[5]]))  +
-  #the following lines of code change the colors of the lines in the graph. 
   scale_color_manual( values = c("Overweight" = "black",
                                  "Men" = "blue",
                                  "Women" = "deeppink")) +
-  #The last lines of code in this chunk define the layout of the graph. This includes x and y-axis and the labels.
   scale_x_continuous(breaks = seq(1980, 2025, by = 5)) +
   ylim(0,50) +
-  labs(title = "Percentage of overweight men \ncompared to overweight woman over time (1981-2025)",
+  labs(title = "Percentage of overweight (BMI > 25) men \ncompared to overweight woman over time (1981-2025)",
        x = "Year",
        y = "Percentage of people",
        color = "group") +
     theme(plot.title = element_text(hjust = 0.5))
   
 ggsave("Graphs/plot_men_vs_women.png", plot_men_vs_women, width = 9, height = 6)
+plot_men_vs_women
 ```
 Over the 44-year period shown, the percentage of overweight adults has always been higher among men than among women. Although this gap has shrunk in recent years, men still show a higher rates of overweight. furthermore, the percentage of overweight men and the percentage of overweight women have generally moved together over time. 
 
@@ -420,20 +419,18 @@ Over the 44-year period shown, the percentage of overweight adults has always be
 in 2005, the Dutch covenant overweight was introduced and signed by several organizations with the goal of preventing overweight and obesity. Here it is tested if the percentage of overweight and obese people has reduced since its introduction.
 
 ```{r analysis}
-#the following lines of code make the lines and the plot, including a vertical line at the time of the event.
 plot_event <- ggplot() +
   geom_line(aes(x = perc_overgewicht[[1]],
                 y = perc_overgewicht[[2]],
-                color = "Overgewicht")) +
+                color = "Overgewicht \n(BMI > 25)")) +
   geom_line(aes(x = perc_overgewicht[[1]],
                 y = perc_overgewicht[[3]],
-                color = "Obesitas")) +
+                color = "Obesitas \n(BMI > 30)")) +
     geom_point(aes(x = perc_overgewicht[[1]],
                  y = perc_overgewicht[[2]])) +
   geom_point(aes(x = perc_overgewicht[[1]],
                  y = perc_overgewicht[[3]])) +
   geom_vline(xintercept = 2005, linetype = "dashed")+
-   # The remaining code in this chunk defines the layout of the graph. This includes x and y-axis, the text inside the graph and the labels.
   annotate("text", x = 2012, y = 30, size = 3, label = "Covenant overweight") +
   scale_x_continuous(breaks = seq(1980, 2025, by = 5)) +
   ylim(0,50) +
@@ -443,7 +440,7 @@ plot_event <- ggplot() +
     theme(plot.title = element_text(hjust = 0.5))
   
 ggsave("Graphs/®plot_event.png", plot_event, width = 9, height = 6)
-
+plot_event
 ```
 
 As shown in the temporal variation, the percentage of overweight/obese people has increased at a relatively constant rate over time. This rate does not appear to have changed from 2005 onwards. Consequently, no clear change can be observed following the introduction of the covenant on overweight and obesity, however based on the graph alone, it is not possible to determine whether the covenant had an effect. 
