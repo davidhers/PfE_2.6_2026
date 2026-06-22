@@ -254,11 +254,6 @@ Variable 1
 proc_ver_overgewicht = ((overgewicht_2021 - overgewicht_1981) / overgewicht_1981) * 100
 ```
 
-Variable 2
-
-```{r gen_var2}
-
-```
 
 ## 3.3 Visualize temporal variation
 
