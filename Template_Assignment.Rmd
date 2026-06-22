@@ -28,13 +28,7 @@ library(sf)
 
 # Title Page
 
-Include your names
-David Hers, 2905659
-Norah Aalders, 2889433
-Casper Flipse, 2898924
-Sinem Göral, 2817932
-Chris Kool, 2898107
-Roel van Soelen, 2898917
+Include your names David Hers, 2905659 Norah Aalders, 2889433 Casper Flipse, 2898924 Sinem Göral, 2817932 Chris Kool, 2898107 Roel van Soelen, 2898917
 
 Group 2.6
 
@@ -48,17 +42,11 @@ Use APA referencing throughout your document. [Here's a link to some explanation
 
 Include the following:
 
--   Why is this relevant?
+- Why is this relevant?
 
--   Overweightness in the Netherlands: A Social Problem Hidden in Plain Sight
+- Overweightness in the Netherlands: A Social Problem Hidden in Plain Sight
 
-Walk through any Dutch city today and the numbers get to ignore. More than half of Dutch adults are overweight, one in six has obesity (Rijksinstituut voor Volksgezondheid en Milieu [RIVM], 2026), and if current trends continue, two in three people could be affected by 2050. What was once seen as a personal health issue has become a major social challenge.
-This became clear when Zorginstituut Nederland announced that bariatric surgery will now be covered by basic health insurance for teenagers aged 13 to 18 with severe obesity. Although only a small number of young people will qualify, the decision reflects growing recognition that lifestyle interventions alone are not always enough.
-To understand obesity, however, we must look beyond individual choices. In the Netherlands, obesity is strongly linked to social inequality. People with lower levels of education are significantly more likely to be overweight than university graduates (RIVM, 2026). Lower-income groups often have less access to healthy food, safe places to exercise, and supportive living environments. Research also shows that factors such as neighbourhood safety, green spaces, and social cohesion influence obesity rates.(OECD & European Observatory on Health Systems and Policies, 2025).
-The consequences extend beyond health. Obesity is associated with higher healthcare costs, lower earnings, increased sick leave, and reduced economic productivity. Children with obesity are more likely to face educational, social, and health disadvantages later in life.
-This argues that obesity in the Netherlands should be viewed as a social problem rather than simply a matter of personal responsibility. Addressing it effectively requires tackling the structural inequalities that make obesity more common among disadvantaged groups.
-
-
+Walk through any Dutch city today and the numbers get to ignore. More than half of Dutch adults are overweight, one in six has obesity (Rijksinstituut voor Volksgezondheid en Milieu [RIVM], 2026), and if current trends continue, two in three people could be affected by 2050. What was once seen as a personal health issue has become a major social challenge. This became clear when Zorginstituut Nederland announced that bariatric surgery will now be covered by basic health insurance for teenagers aged 13 to 18 with severe obesity. Although only a small number of young people will qualify, the decision reflects growing recognition that lifestyle interventions alone are not always enough. To understand obesity, however, we must look beyond individual choices. In the Netherlands, obesity is strongly linked to social inequality. People with lower levels of education are significantly more likely to be overweight than university graduates (RIVM, 2026). Lower-income groups often have less access to healthy food, safe places to exercise, and supportive living environments. Research also shows that factors such as neighbourhood safety, green spaces, and social cohesion influence obesity rates.(OECD & European Observatory on Health Systems and Policies, 2025). The consequences extend beyond health. Obesity is associated with higher healthcare costs, lower earnings, increased sick leave, and reduced economic productivity. Children with obesity are more likely to face educational, social, and health disadvantages later in life. This argues that obesity in the Netherlands should be viewed as a social problem rather than simply a matter of personal responsibility. Addressing it effectively requires tackling the structural inequalities that make obesity more common among disadvantaged groups.
 
 - Overweightness in the Netherlands: A Social Problem Hidden in Plain Sight
 
@@ -86,19 +74,10 @@ saveRDS(opleiding_dataset, "data/opleiding_dataset.rds")
 
 ```
 
-midwest is an example dataset included in the tidyverse package
-
-## 2.2 Provide a short summary of the dataset(s)
-
-```{r}
-
-
-
-```
-
 ``` r
 inline_code = TRUE
 ```
+
 In this project, we utilize two datasets released by CBS (Statistics Netherlands) that collectively offer insight into the health of the Dutch population. The initial dataset, Gezondheidsmonitor; adults 18 years and older, region, 2024, centers on individuals aged 18 and above residing in the Netherlands. CBS compiled it in partnership with the National Institute for Public Health and the Environment (RIVM) and the local Public Health Services (GGDs). The data collection provides insights into health conditions, lifestyle choices, and social elements across various geographical tiers, such as municipalities, GGD regions, provinces, and at the national level. Essential indicators consist of self-assessed health, rates of chronic diseases, overweight and obesity, levels of physical exercise, involvement in sports, tobacco use, alcohol intake, and informal caregiving. The information is primarily shown as percentages of the adult demographic and offers a comprehensive regional overview of health and wellness in 2024.The second dataset, Lengte en gewicht van personen, ondergewicht en overgewicht; vanaf 1981, provides a longitudinal view of body weight and obesity trends in the Netherlands. This dataset includes individuals aged four and older and monitors trends from 1981 to 2025. It contains data regarding body mass index (BMI), moderate overweight, obesity, and underweight, categorized by age group, gender, and year. The data relies on self-reported weight and height, which CBS utilizes to determine BMI categories. In contrast to the initial dataset that highlights regional variations for one year, this dataset offers a national time series enabling researchers to explore changes in overweight and obesity across more than forty years.
 
 Collectively, these datasets enhance each other effectively. The Health Monitor dataset offers an in-depth view of regional health disparities in 2024, whereas the height and weight dataset uncovers enduring national patterns of overweight and obesity. Integrating information from both sources allows for a clearer comprehension of obesity's prevalence in the Netherlands, its regional variations, and its historical trends.
@@ -109,9 +88,9 @@ These are things that are usually included in the metadata of the dataset. For y
 
 Think of things like:
 
--   Do the variables contain health information or SES information?
+- Do the variables contain health information or SES information?
 
--   Have they been measured by interviewing individuals or is the data coming from administrative sources?
+- Have they been measured by interviewing individuals or is the data coming from administrative sources?
 
 *For the sake of this example, I will continue with the assignment...*
 
@@ -241,7 +220,6 @@ data_overweight_provence <- data.frame(Regio = gezondheids_data_provincies[[1]],
   Overgewicht = gezondheids_data_provincies[[4]] + gezondheids_data_provincies[[5]])
 ```
 
-
 ```{r data_mergen}
 name_change <- full_join(opleiding_provincie, gemiddeld_inkomen)
 
@@ -323,8 +301,13 @@ provincies_kaart$statnaam
 
 nl_map <- provincies_kaart |> left_join(dataset_map, by = c("statnaam" = "Regio")) 
 
+```
 
-map_overweight <- ggplot(nl_map) +
+
+
+```{r}
+combined_plot <-
+  (ggplot(nl_map) +
   geom_sf(aes(fill = Overgewicht ), color = "white", linewidth = 0.4) +
   scale_fill_gradient(name = "Percentage of \noverweight people \n(BMI > 25)\n(data reversed)", high = "#e8f5e9", 
   low = "#1b5e20") +
@@ -332,48 +315,43 @@ map_overweight <- ggplot(nl_map) +
     title   = "Percentage of overweight people\n by province in the Netherlands (2024)"  ) +
   theme_void() +
   theme(plot.title = element_text(hjust = 0.5, face = "bold"))
-
-ggsave("graphs/map_overweight_people.png", map_overweight, width = 6, height = 10)
-```
-
-```{r}
-map_high_education <- ggplot(nl_map) +
+  |
+  ggplot(nl_map) +
+  geom_sf(aes(fill =  Gemiddeld_inkomen.x.1000.), color = "white", linewidth = 0.4) +
+  scale_fill_gradient(name = "Average income \n(x1000)", low = "#e8f5e9", high = "#1b5e20") +
+  labs(
+    title   = "Average income by province\n in the Netherlands"  ) +
+  theme_void() +
+  theme(plot.title = element_text(hjust = 0.5, face = "bold"))) /
+  (ggplot(nl_map) +
   geom_sf(aes(fill = Percentage_hoogopgeleide ), color = "white", linewidth = 0.4) +
   scale_fill_gradient(name = "Percentage highly \neducated people", low = "#e8f5e9", high = "#1b5e20") +
   labs(
     title   = "Percentage of highly educated people \n by province in the Netherlands (2024)"  ) +
   theme_void() +
   theme(plot.title = element_text(hjust = 0.5, face = "bold"))
-
-ggsave("Graphs/map_high-education.png", map_high_education, width = 6, height = 10)
-```
-
-```{r}
-map_lower_education <- ggplot(nl_map) +
+ | 
+   ggplot(nl_map) +
   geom_sf(aes(fill = Percentage_laagopgeleide ), color = "white", linewidth = 0.4) +
   scale_fill_gradient(name = "Percentage lower\n educated people \n(data reversed)", high = "#e8f5e9", low = "#1b5e20") +
   labs(
     title   = "Percentage of lower educated people\n by province in the Netherlands (2024)"  ) +
   theme_void() +
   theme(plot.title = element_text(hjust = 0.5, face = "bold"))
+   )
 
-ggsave("Graphs/map_lower_education.png", map_lower_education, width = 6, height = 10)
+combined_plot
+
+ggsave(
+  "Graphs/maps_comparison.png",
+  combined_plot,
+  width = 14,
+  height = 12,
+  dpi = 300
+)
 ```
 
-```{r}
-map_avg_income <- ggplot(nl_map) +
-  geom_sf(aes(fill =  Gemiddeld_inkomen.x.1000.), color = "white", linewidth = 0.4) +
-  scale_fill_gradient(name = "Average income \n(x1000)", low = "#e8f5e9", high = "#1b5e20") +
-  labs(
-    title   = "Average income by province\n in the Netherlands"  ) +
-  theme_void() +
-  theme(plot.title = element_text(hjust = 0.5, face = "bold"))
-
-ggsave("Graphs/map_avg_income.png", map_avg_income, width = 6, height = 10)
-```
-
-As shown in the map representing hte perecentage of overweight and obese individuals, the provinces Utrecht, Noord-Holland, and Groningen appear to have the lowest prevalence rates. In contrast, Flevoland, Limburg and Drenthe have the highest percentage of overweight and obese residents. Furthermore a possible correlation can be found between overweight and obesity and educational level. The provinces with the lowest prevalence rates also have the highest level of education, whereas Flevoland and Drenthe, which have a relatively lower education level, show a higher percentage of overweight and obese residents. The level of income and overweight appear to have a weaker relationship. 
-
+As shown in the map representing the perecentage of overweight and obese individuals, the provinces Utrecht, Noord-Holland, and Groningen appear to have the lowest prevalence rates. In contrast, Flevoland, Limburg and Drenthe have the highest percentage of overweight and obese residents. Furthermore a possible correlation can be found between overweight and obesity and educational level. The provinces with the lowest prevalence rates also have the highest level of education, whereas Flevoland and Drenthe, which have a relatively lower education level, show a higher percentage of overweight and obese residents. The level of income and overweight appear to have a weaker relationship.
 
 ## 3.5 Visualize sub-population variation
 
@@ -411,8 +389,8 @@ plot_men_vs_women <- ggplot() +
 ggsave("Graphs/plot_men_vs_women.png", plot_men_vs_women, width = 9, height = 6)
 plot_men_vs_women
 ```
-Over the 44-year period shown, the percentage of overweight adults has always been higher among men than among women. Although this gap has shrunk in recent years, men still show a higher rates of overweight. furthermore, the percentage of overweight men and the percentage of overweight women have generally moved together over time. 
 
+Over the 44-year period shown, the percentage of overweight adults has always been higher among men than among women. Although this gap has shrunk in recent years, men still show a higher rates of overweight. furthermore, the percentage of overweight men and the percentage of overweight women have generally moved together over time.
 
 ## 3.6 Event analysis
 
@@ -443,7 +421,7 @@ ggsave("Graphs/®plot_event.png", plot_event, width = 9, height = 6)
 plot_event
 ```
 
-As shown in the temporal variation, the percentage of overweight/obese people has increased at a relatively constant rate over time. This rate does not appear to have changed from 2005 onwards. Consequently, no clear change can be observed following the introduction of the covenant on overweight and obesity, however based on the graph alone, it is not possible to determine whether the covenant had an effect. 
+As shown in the temporal variation, the percentage of overweight/obese people has increased at a relatively constant rate over time. This rate does not appear to have changed from 2005 onwards. Consequently, no clear change can be observed following the introduction of the covenant on overweight and obesity, however based on the graph alone, it is not possible to determine whether the covenant had an effect.
 
 # Part 4 - Discussion
 
@@ -457,18 +435,16 @@ Provide the link to your PUBLIC repository here: ...
 
 ## 5.2 Reference list
 
-Use APA referencing throughout your document.
-AlleCijfers. (2026, April). GGD-regio's: overzicht en statistieken per GGD-regio.https://allecijfers.nl/ggd-regios/
+Use APA referencing throughout your document. AlleCijfers. (2026, April). GGD-regio's: overzicht en statistieken per GGD-regio.https://allecijfers.nl/ggd-regios/
 
-Centraal Bureau voor de Statistiek. (2024, oktober). Obesitas afgelopen 40 jaar verdrievoudigd. https://www.cbs.nl/nl-nl/nieuws/2024/10/obesitas-afgelopen-40-jaar-verdrievoudigd
+Centraal Bureau voor de Statistiek. (2024, oktober). Obesitas afgelopen 40 jaar verdrievoudigd. <https://www.cbs.nl/nl-nl/nieuws/2024/10/obesitas-afgelopen-40-jaar-verdrievoudigd>
 
-GGD Zaanstreek-Waterland. (2022). Wat kost overgewicht? https://www.ggdzw.nl/wat-kost-overgewicht/
+GGD Zaanstreek-Waterland. (2022). Wat kost overgewicht? <https://www.ggdzw.nl/wat-kost-overgewicht/>
 
-NOS. (2026, 4 juni). Maagverkleining voor kinderen met obesitas in basispakket als laatste redmiddel. https://nos.nl/artikel/2617067-maagverkleining-voor-kinderen-met-obesitas-in-basispakket-als-laatste-redmiddel
+NOS. (2026, 4 juni). Maagverkleining voor kinderen met obesitas in basispakket als laatste redmiddel. <https://nos.nl/artikel/2617067-maagverkleining-voor-kinderen-met-obesitas-in-basispakket-als-laatste-redmiddel>
 
-OECD & European Observatory on Health Systems and Policies. (2025). State of health in the EU: Netherlands — Country health profile 2025. OECD Publishing. https://www.oecd.org/en/publications/country-health-profile-2025-country-notes_c0e8b8be-en/netherlands_95a85df5-en.html
+OECD & European Observatory on Health Systems and Policies. (2025). State of health in the EU: Netherlands — Country health profile 2025. OECD Publishing. <https://www.oecd.org/en/publications/country-health-profile-2025-country-notes_c0e8b8be-en/netherlands_95a85df5-en.html>
 
-Rijksinstituut voor Volksgezondheid en Milieu. (2026). Overgewicht — Volwassenen. Volksgezondheidenzorg.info. https://www.vzinfo.nl/overgewicht/volwassenen
+Rijksinstituut voor Volksgezondheid en Milieu. (2026). Overgewicht — Volwassenen. Volksgezondheidenzorg.info. <https://www.vzinfo.nl/overgewicht/volwassenen>
 
-Rijksinstituut voor Volksgezondheid en Milieu. (2026). Sociaaleconomische gezondheidsverschillen. Volksgezondheidenzorg.info. https://www.vzinfo.nl/sociaaleconomische-gezondheidsverschillen
-
+Rijksinstituut voor Volksgezondheid en Milieu. (2026). Sociaaleconomische gezondheidsverschillen. Volksgezondheidenzorg.info. <https://www.vzinfo.nl/sociaaleconomische-gezondheidsverschillen>
