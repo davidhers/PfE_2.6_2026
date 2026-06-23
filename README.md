@@ -7,6 +7,6 @@ the percentages of different education levels per province and lastly the percen
 compare them, to see if there might be some kind of correlation between these things. 
 
 Using this code is very easy. If all the packages are installed already, run the entire code (the datasets are already downloaded to the map), otherwise install the 
-packages and run the entire code. 
+packages and run the entire code. the map data contains the data and the map graphs contains the final graphs 
 
 made by David Hers, Norah Aalders, Casper Flipse, Sinem Göral, Chris Kool and Roel van Soelen.
