@@ -4,9 +4,9 @@ author:
   - "David Hers (2905659)"
   - "Norah Aalders (2889433)"
   - "Casper Flipse (2898924)"
-  - "Sinem Göral"
-  - "Chris Kool (2817932)"
-  - "Roel van Soelen (2898107)"
+  - "Sinem Göral (2817932)"
+  - "Chris Kool (2898107)"
+  - "Roel van Soelen (2898917)"
 date: "`r Sys.Date()`"
 output:
   pdf_document:
@@ -504,7 +504,7 @@ A limitation of this study is that it relies mainly on descriptive analysis and 
 
 ## 5.1 Github repository link
 
-Provide the link to your PUBLIC repository here:
+Provide the link to your PUBLIC repository here: https://github.com/davidhers/PfE_2.6_2026.git
 
 ## 5.2 Reference list
 
