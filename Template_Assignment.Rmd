@@ -1,8 +1,15 @@
 ---
 title: "Overweightness and SES"
-author: "David Hers, 2905659 Norah Aalders, 2889433 Casper Flipse, 2898924 Sinem Göral, 2817932 Chris Kool, 2898107 Roel van Soelen, 2898917 "
+author:
+  - "David Hers (2905659)"
+  - "Norah Aalders (2889433)"
+  - "Casper Flipse (2898924)"
+  - "Sinem Göral"
+  - "Chris Kool (2817932)"
+  - "Roel van Soelen (2898107)"
 date: "`r Sys.Date()`"
-output: html_document
+output:
+  pdf_document:
     toc: true
 ---
 
@@ -13,7 +20,8 @@ output: html_document
 #install.packages()
 #install.packages("sf")   
 #install.packages("patchwork")
-install.packages("tinytex")
+#install.packages("renv")
+#install.packages("tinytex")
 ```
 
 ```{r packages}
@@ -23,8 +31,9 @@ require(yaml)
 library(readxl)
 library(sf)
 library(patchwork)
-tinytex::install_tinytex()
+#tinytex::install_tinytex()
 ```
+
 
 # Overweightness and SES
 
@@ -43,19 +52,25 @@ saveRDS(gewicht_regios, "data/gewicht_regios.rds")
 overgewicht_over_tijd <- read_xlsx("data/Lengte__onder__en_overgewicht_vanaf_1981_04062026_120636.xlsx")
 saveRDS(overgewicht_over_tijd, "data/overgewicht_over_tijd.rds")
 
-inkomen_dataset <- read_xlsx("data/Inkomens_Huishouden.xlsx")
+inkomen_dataset <- 
+  read_xlsx("data/Inkomens_Huishouden.xlsx")
 saveRDS(inkomen_dataset, "data/inkomen_dataset.rds")
 
-opleiding_dataset <- read_xlsx("data/Onderwijs_per_provincie.xlsx")
+opleiding_dataset <- 
+  read_xlsx("data/Onderwijs_per_provincie.xlsx")
 saveRDS(opleiding_dataset, "data/opleiding_dataset.rds")
 
-gewicht_regios <- readRDS("data/gewicht_regios.rds")
-overgewicht_over_tijd <- readRDS("data/overgewicht_over_tijd.rds")
-inkomen_dataset <- readRDS("data/inkomen_dataset.rds")
-opleiding_dataset <- readRDS("data/opleiding_dataset.rds")
+gewicht_regios <- 
+  readRDS("data/gewicht_regios.rds")
+overgewicht_over_tijd <- 
+  readRDS("data/overgewicht_over_tijd.rds")
+inkomen_dataset <- 
+  readRDS("data/inkomen_dataset.rds")
+opleiding_dataset <- 
+  readRDS("data/opleiding_dataset.rds")
 
-#loading in the data and saving it as an RDS so that they will not be lost.
 ```
+loading in the data and saving it as an RDS so that they will not be lost
 
 ## 2.2 Explanation data
 
@@ -76,7 +91,11 @@ overgewicht_2025 = overgewicht_over_tijd[13,5]
 Selecting data for making the variable for the percentage change over time (later in the PDF)
 
 ```{r data_cleaning_2}
-perc_overgewicht <- full_join(overgewicht_over_tijd[1:13, c(4,5,7)], full_join(overgewicht_over_tijd[40:52, c(4,5)], overgewicht_over_tijd[79:91, c(4,5)], by = "Perioden"), by = "Perioden")
+perc_overgewicht <- 
+  full_join(overgewicht_over_tijd[1:13, c(4,5,7)], 
+            full_join(overgewicht_over_tijd[40:52, c(4,5)], 
+                      overgewicht_over_tijd[79:91, c(4,5)], 
+                      by = "Perioden"), by = "Perioden")
 
 ```
 
@@ -94,11 +113,14 @@ perc_overgewicht$Percentage_difference <- c(NA, list_perc_point_change)
 To the dataset the percentage point change of overweight people compared to the last datapoint is added. Since there is no percentage point change for the first datapoint, NA gets added there. This will be used for the last plot. This is the first final dataset.
 
 ```{r data_cleaning_4}
-opleiding_provincie <- data.frame("Regio" = opleiding_dataset[[4]][6:17],
-                                  "Percentage_laagopgeleide" = opleiding_dataset[[6]][6:17] + opleiding_dataset[[7]][6:17], 
-                                  "Percentage_middelopgeleide" = opleiding_dataset[[8]][6:17],
+opleiding_provincie <- 
+  data.frame("Regio" = opleiding_dataset[[4]][6:17],
+              "Percentage_laagopgeleide" = opleiding_dataset[[6]][6:17] +
+               opleiding_dataset[[7]][6:17], 
+              "Percentage_middelopgeleide" = opleiding_dataset[[8]][6:17],
                                   
-                                  "Percentage_hoogopgeleide" = opleiding_dataset[[9]][6:17] + opleiding_dataset[[10]][6:17]
+              "Percentage_hoogopgeleide" = opleiding_dataset[[9]][6:17] +
+               opleiding_dataset[[10]][6:17]
 )
 
 ```
@@ -162,9 +184,15 @@ limburg_zuid <- 601355
 
 ```{r data_cleaning_function}
 
-data_analysis <- function(regio1 = 0, data1 = 0, regio2 = 0, data2 = 0, regio3 = 0, data3 = 0, regio4 = 0, data4 = 0, regio5 = 0,  data5 = 0){
+data_analysis <- function(regio1 = 0, data1 = 0, regio2 = 0, data2 = 0, 
+                          regio3 = 0, data3 = 0, regio4 = 0, data4 = 0, 
+                          regio5 = 0,  data5 = 0){
   totaal_provincie <- regio1 + regio2 + regio3 + regio4
-  data_provincie <- ((regio1 / totaal_provincie) * data1) + ((regio2 / totaal_provincie) * data2) + ((regio3 / totaal_provincie) * data3) + ((regio4 / totaal_provincie) * data4)  
+  data_provincie <- ((regio1 / totaal_provincie) * data1) 
+  + ((regio2 / totaal_provincie) * data2) 
+  + ((regio3 / totaal_provincie) * data3) 
+  + ((regio4 / totaal_provincie) * data4) 
+  + ((regio5 / totaal_provincie) * data5)
   
   return(data_provincie)
   
@@ -175,36 +203,39 @@ data_analysis <- function(regio1 = 0, data1 = 0, regio2 = 0, data2 = 0, regio3 =
 The function above is created to calculate a new variable, the percentage of overweight people in the provinces instead of the percentage of overweight people in GGD regions. These GGD regions are always in one province, making it fairly easy to calculate the percentage of the provinces. These provinces are made up of different amount of GGD regions, so the input data is standardized to zero for everything, so that one to five different factors can be given without the function giving an error. This then returns the percentage of overweight people in the province by the formula in the chunk.
 
 ```{r}
-gezondheids_data_provincies <- rbind(Groningen  = data_analysis(groningen, data_regios[1, 2:10]),
-
-                              Fryslân = data_analysis(friesland, data_regios[24, 2:10]),
-
-                              Drenthe = data_analysis(drenthe , data_regios[2, 2:10]),
-
-                              Overijssel = data_analysis(ijsselland, data_regios[3,2:10], twente, data_regios[4,2:10]),
-
-                              Flevoland = data_analysis(flevoland , data_regios[8, 2:10]),
-      
-                              Gelderland = data_analysis(noord_oost_gelderland, data_regios[5, 2:10], gelderland_midden, data_regios[6, 2:10], gelderland_zuid, data_regios[7, 2:10]),
+gezondheids_data_provincies <- 
+  rbind(Groningen  = data_analysis(groningen, data_regios[1, 2:10]),
+        
+        Fryslân = data_analysis(friesland, data_regios[24, 2:10]),
+        
+        Drenthe = data_analysis(drenthe , data_regios[2, 2:10]),
+        
+        Overijssel = data_analysis(ijsselland, data_regios[3,2:10], twente, data_regios[4,2:10]),
+        Flevoland = data_analysis(flevoland , data_regios[8, 2:10]),
+        Gelderland = data_analysis(noord_oost_gelderland, data_regios[5, 2:10], gelderland_midden, 
+        data_regios[6, 2:10], gelderland_zuid, data_regios[7, 2:10]),
                               
-                              Utrecht = data_analysis(utrecht, data_regios[9, 2:10]),
+        Utrecht = data_analysis(utrecht, data_regios[9, 2:10]),
                               
-                              "Noord-Holland" = data_analysis(hollands_noorden , data_regios[10, 2:10], zaanstreek, data_regios[25, 2:10], kennemerland, data_regios[11, 2:10], amsterdam, data_regios[12, 2:10], gooi, data_regios[13, 2:10]),
+        "Noord-Holland" = data_analysis(hollands_noorden , data_regios[10, 2:10], zaanstreek, data_regios[25, 2:10],
+        kennemerland, data_regios[11, 2:10], amsterdam, data_regios[12, 2:10], gooi, data_regios[13, 2:10]),
 
-                              "Zuid-Holland" = data_analysis(haaglanden, data_regios[23, 2:10], hollands_midden, data_regios[14, 2:10], rotterdam, data_regios[15, 2:10], zuid_holland_zuid, data_regios[16, 2:10]),
+        "Zuid-Holland" = data_analysis(haaglanden, data_regios[23, 2:10], hollands_midden, data_regios[14, 2:10],
+         rotterdam, data_regios[15, 2:10], zuid_holland_zuid, data_regios[16, 2:10]),
 
-                              Zeeland = data_analysis(zeeland , data_regios[17, 2:10]),
+         Zeeland = data_analysis(zeeland , data_regios[17, 2:10]),
 
-                              "Noord-Brabant" = data_analysis(west_brabant, data_regios[18, 2:10], hart_brabant, data_regios[19, 2:10], brabant_zuidoost, data_regios[20, 2:10]),
+         "Noord-Brabant" = data_analysis(west_brabant, data_regios[18, 2:10], hart_brabant, data_regios[19, 2:10], brabant_zuidoost, data_regios[20, 2:10]),
 
-                              Limburg = data_analysis(limburg_noord, data_regios[21, 2:10], limburg_zuid, data_regios[22, 2:10]))
+          Limburg = data_analysis(limburg_noord, data_regios[21, 2:10], limburg_zuid, data_regios[22, 2:10]))
 
 gezondheids_data_provincies <- as.data.frame(gezondheids_data_provincies)
 
 gezondheids_data_provincies$Provincie <- rownames(gezondheids_data_provincies)
 rownames(gezondheids_data_provincies) <- NULL
-gezondheids_data_provincies <- gezondheids_data_provincies[, c("Provincie",
-                                                               setdiff(names(gezondheids_data_provincies), "Provincie"))]
+gezondheids_data_provincies <- 
+  gezondheids_data_provincies[, c("Provincie",        
+  setdiff(names(gezondheids_data_provincies), "Provincie"))]
 ```
 
 A new dataset gets created, with the function from before. Every name is in a very specific way to merge it into a bigger dataset for the different maps that need to be created. This is also the explanation for line 200 to 205, to merge with columnname "provincie".
@@ -269,17 +300,20 @@ perc_over_time_plot = ggplot() +
                  y = perc_overgewicht[[3]])) +
   scale_x_continuous(breaks = seq(1980, 2025, by = 5)) +
   ylim(0,50) +
-  labs(title = "Percentage of overweight people\n over time in the Netherlands (1981-2025)",
-       x = "Year",
-       y = "Percentage of people") +
-      theme(plot.title = element_text(hjust = 0.5))
+  labs(
+    title = "Percentage of overweight people\n over time in the Netherlands (1981-2025)",
+    x = "Year",
+    y = "Percentage of people") +
+    theme(plot.title = element_text(hjust = 0.5))
 
-ggsave("Graphs/Percentage_overgewicht_over_tijd.png", perc_over_time_plot, width = 9, height = 6)
+ggsave("Graphs/Percentage_overgewicht_over_tijd.png", 
+       perc_over_time_plot, width = 9, height = 6)
 
 perc_over_time_plot
 
-#A plot gets created with ggplot, which gets saved with ggsave. geom_line and geom_point get used to create a clear plot, with scale_x_continuous the x axis values get determined. 
 ```
+A plot gets created with ggplot, which gets saved with ggsave. geom_line and geom_point get used to create a clear plot, with scale_x_continuous the x axis values get determined. 
+
 
 As shown in the graph, the percentage of overweight/obese people has increased at a relatively constant rate over time, with the exception of a larger increase between 1995 and 2000.
 
@@ -296,40 +330,46 @@ provincies_kaart$statnaam
 
 nl_map <- provincies_kaart |> left_join(dataset_map, by = c("statnaam" = "Regio")) 
 
-#One dataset gets merged with the provinces map of the Netherlands, to make 4 different maps to compare them. 
+
 ```
+One dataset gets merged with the provinces map of the Netherlands, to make 4 different maps to compare them. 
 
 ```{r}
 combined_plot <-
   (ggplot(nl_map) +
   geom_sf(aes(fill = Overgewicht ), color = "white", linewidth = 0.4) +
-  scale_fill_gradient(name = "Percentage of \noverweight people \n(BMI > 25)\n(data reversed)", high = "#e8f5e9", 
-  low = "#1b5e20") +
+  scale_fill_gradient(name = "Percentage of \noverweight people \n(BMI > 25)
+                      \n(data reversed)",
+                      high = "#e8f5e9", low = "#1b5e20") +
   labs(
-    title   = "Percentage of overweight people\n by province in the Netherlands (2024)"  ) +
+    title = "Percentage of overweight people\n by province in the Netherlands (2024)") +
   theme_void() +
   theme(plot.title = element_text(hjust = 0.5, face = "bold"))
   |
   ggplot(nl_map) +
   geom_sf(aes(fill =  Gemiddeld_inkomen.x.1000.), color = "white", linewidth = 0.4) +
-  scale_fill_gradient(name = "Average income \n(x1000)", low = "#e8f5e9", high = "#1b5e20") +
+  scale_fill_gradient(name = "Average income \n(x1000)", 
+                      low = "#e8f5e9", high = "#1b5e20") +
   labs(
     title   = "Average income by province\n in the Netherlands"  ) +
   theme_void() +
   theme(plot.title = element_text(hjust = 0.5, face = "bold"))) /
+  
   (ggplot(nl_map) +
   geom_sf(aes(fill = Percentage_hoogopgeleide ), color = "white", linewidth = 0.4) +
-  scale_fill_gradient(name = "Percentage highly \neducated people", low = "#e8f5e9", high = "#1b5e20") +
+  scale_fill_gradient(name = "Percentage highly \neducated people", 
+                      low = "#e8f5e9", high = "#1b5e20") +
   labs(
-    title   = "Percentage of highly educated people \n by province in the Netherlands (2024)"  ) +
+    title = "Percentage of highly educated people \n by province in the Netherlands (2024)") +
   theme_void() +
   theme(plot.title = element_text(hjust = 0.5, face = "bold"))
  | 
    ggplot(nl_map) +
   geom_sf(aes(fill = Percentage_laagopgeleide ), color = "white", linewidth = 0.4) +
-  scale_fill_gradient(name = "Percentage lower\n educated people \n(data reversed)", high = "#e8f5e9", low = "#1b5e20") +
+  scale_fill_gradient(name = "Percentage lower\n educated people \n(data reversed)", 
+                      high = "#e8f5e9", low = "#1b5e20") +
   labs(
-    title   = "Percentage of lower educated people\n by province in the Netherlands (2024)"  ) +
+    title = "Percentage of lower educated people\n by province in the Netherlands (2024)") +
   theme_void() +
   theme(plot.title = element_text(hjust = 0.5, face = "bold"))
    )
@@ -344,8 +384,9 @@ ggsave(
   dpi = 300
 )
 
-#The dataset for the maps gets used for four different plots. These get combined into on big plot. (This plot down below does not show it right, but if you open the file, the graphs map and then open the maps_comparison.png it does look how it should look.)
+
 ```
+The dataset for the maps gets used for four different plots. These get combined into on big plot. (This plot down below does not show it right, but if you open the file, the graphs map and then open the maps_comparison.png it does look how it should look.)
 
 In the top left and down right, the data is reversed. This is done because this makes comparing the different maps easier and a lot more obvious.
 
@@ -378,7 +419,8 @@ plot_men_vs_women <- ggplot() +
                                  "Women" = "deeppink")) +
   scale_x_continuous(breaks = seq(1980, 2025, by = 5)) +
   ylim(0,50) +
-  labs(title = "Percentage of overweight (BMI > 25) men \ncompared to overweight woman over time (1981-2025)",
+  labs(title = "Percentage of overweight (BMI > 25) men 
+       compared to overweight woman over time (1981-2025)",
        x = "Year",
        y = "Percentage of people",
        color = "group") +
@@ -386,8 +428,9 @@ plot_men_vs_women <- ggplot() +
   
 ggsave("Graphs/plot_men_vs_women.png", plot_men_vs_women, width = 9, height = 6)
 plot_men_vs_women
-#The plot gets created with ggplot and is saved with ggsave. geom_line and geom_point are used to create a clear plot, with scale_x_continuous the x axis values get determined.scale_color_manual gives the lines the correct colors. labs is used to create the labels/text in the graph.
+
 ```
+The plot gets created with ggplot and is saved with ggsave. geom_line and geom_point are used to create a clear plot, with scale_x_continuous the x axis values get determined.scale_color_manual gives the lines the correct colors. labs is used to create the labels/text in the graph.
 
 Over the 44-year period shown, the percentage of overweight adults has always been higher among men than among women. Although this gap has shrunk in recent years, men still show a higher rates of overweight. furthermore, the percentage of overweight men and the percentage of overweight women have generally moved together over time.
 
@@ -405,7 +448,7 @@ plot_event <- ggplot() +
                 color = "Obesity \n(BMI > 30)")) +
   geom_line(aes(x = perc_overgewicht[[1]],
                 y = perc_overgewicht[[6]],
-              color = "Percentage point change\ncompared to last data point \n(of the percentage of overweight people)"),
+              color = "Percentage point change\ncompared to\nlast data point\n(of the percentage of \noverweight people)"),
               na.rm = TRUE) +
     geom_point(aes(x = perc_overgewicht[[1]],
                  y = perc_overgewicht[[2]])) +
@@ -418,15 +461,17 @@ plot_event <- ggplot() +
   annotate("text", x = 2012, y = 30, size = 3, label = "Covenant overweight") +
   scale_x_continuous(breaks = seq(1980, 2025, by = 5)) +
   ylim(-5,50) +
-  labs(title = "Percentage of overweight people\n over time in the Netherlands(1981-2025)",
+  labs(title = "Percentage of overweight people
+      over time in the Netherlands(1981-2025)",
        x = "Year",
        y = "Percentage of people") +
     theme(plot.title = element_text(hjust = 0.5))
   
 ggsave("Graphs/®plot_event.png", plot_event, width = 9, height = 6)
 plot_event
-#The plot gets created with ggplot and is saved with ggsave. geom_line and geom_point are used to create a clear plot, with scale_x_continuous the x axis values get determined.geom_vline is for creating a vertical line at the year of the event and annotate is used for adding the event name next to the vertical line. labs is used to create the labels/text in the graph.
+
 ```
+The plot gets created with ggplot and is saved with ggsave. geom_line and geom_point are used to create a clear plot, with scale_x_continuous the x axis values get determined.geom_vline is for creating a vertical line at the year of the event and annotate is used for adding the event name next to the vertical line. Labs is used to create the labels/text in the graph.
 
 As shown in the temporal variation, the percentage of overweight/obese people has increased at a relatively constant rate over time. This rate seems a to have slowed down a little from 2005 onwards in absolute terms, but this could be due to multiple reasons. Consequently, it is hard to determine a clear change following the introduction of the covenant on overweight and obesity, but an argument could be made that it did make a change.
 
@@ -445,11 +490,11 @@ A limitation of this study is that it relies mainly on descriptive analysis and 
 
 ## 5.1 Github repository link
 
-Provide the link to your PUBLIC repository here: ...
+Provide the link to your PUBLIC repository here: 
 
 ## 5.2 Reference list
 
-Use APA referencing throughout your document. AlleCijfers. (2026, April). GGD-regio's: overzicht en statistieken per GGD-regio.https://allecijfers.nl/ggd-regios/
+AlleCijfers. (2026, April). GGD-regio's: overzicht en statistieken per GGD-regio.https://allecijfers.nl/ggd-regios/
 
 Centraal Bureau voor de Statistiek. (2024, oktober). Obesitas afgelopen 40 jaar verdrievoudigd. <https://www.cbs.nl/nl-nl/nieuws/2024/10/obesitas-afgelopen-40-jaar-verdrievoudigd>
 
