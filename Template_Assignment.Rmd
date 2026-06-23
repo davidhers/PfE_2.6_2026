@@ -23,7 +23,7 @@ output:
 #install.packages("renv")
 #install.packages("tinytex")
 ```
-
+\clearpage
 ```{r packages}
 require(tidyverse)
 require(rmarkdown)
@@ -33,23 +33,26 @@ library(sf)
 library(patchwork)
 #tinytex::install_tinytex()
 ```
-
-
+\clearpage
 # Overweightness and SES
 
 ## 1 Overweightness in the Netherlands: A Social Problem Hidden in Plain Sight
 
 Walk through any Dutch city today and the numbers get to ignore. More than half of Dutch adults are overweight, one in six has obesity (Rijksinstituut voor Volksgezondheid en Milieu [RIVM], 2026), and if current trends continue, two in three people could be affected by 2050. What was once seen as a personal health issue has become a major social challenge. This became clear when Zorginstituut Nederland announced that bariatric surgery will now be covered by basic health insurance for teenagers aged 13 to 18 with severe obesity. Although only a small number of young people will qualify, the decision reflects growing recognition that lifestyle interventions alone are not always enough. To understand obesity, however, we must look beyond individual choices. In the Netherlands, obesity is strongly linked to social inequality. People with lower levels of education are significantly more likely to be overweight than university graduates (RIVM, 2026). Lower-income groups often have less access to healthy food, safe places to exercise, and supportive living environments. Research also shows that factors such as neighborhood safety, green spaces, and social cohesion influence obesity rates.(OECD & European Observatory on Health Systems and Policies, 2025). The consequences extend beyond health. Obesity is associated with higher healthcare costs, lower earnings, increased sick leave, and reduced economic productivity. Children with obesity are more likely to face educational, social, and health disadvantages later in life. This argues that obesity in the Netherlands should be viewed as a social problem rather than simply a matter of personal responsibility. Addressing it effectively requires tackling the structural inequalities that make obesity more common among disadvantaged groups.
 
+\clearpage
+
 # 2 Data
 
 ## 2.1 Loading in data.
 
 ```{r loading_data}
-gewicht_regios <- read_xlsx("data/Gezondheidsmonitor__regio__2024_04062026_114221.xlsx")
+gewicht_regios <- 
+  read_xlsx("data/Gezondheidsmonitor__regio__2024_04062026_114221.xlsx")
 saveRDS(gewicht_regios, "data/gewicht_regios.rds")
 
-overgewicht_over_tijd <- read_xlsx("data/Lengte__onder__en_overgewicht_vanaf_1981_04062026_120636.xlsx")
+overgewicht_over_tijd <-
+  read_xlsx("data/Lengte__onder__en_overgewicht_vanaf_1981_04062026_120636.xlsx")
 saveRDS(overgewicht_over_tijd, "data/overgewicht_over_tijd.rds")
 
 inkomen_dataset <- 
@@ -70,6 +73,7 @@ opleiding_dataset <-
   readRDS("data/opleiding_dataset.rds")
 
 ```
+
 loading in the data and saving it as an RDS so that they will not be lost
 
 ## 2.2 Explanation data
@@ -78,9 +82,9 @@ In this project, we utilize two datasets released by CBS (Statistics Netherlands
 
 Collectively, these datasets enhance each other effectively. The Health Monitor dataset offers an in-depth view of regional health disparities in 2024, whereas the height and weight dataset uncovers enduring national patterns of overweight and obesity. Integrating information from both sources allows for a clearer comprehension of obesity's prevalence in the Netherlands, its regional variations, and its historical trends.
 
-# Part 3 - Quantifying
+# 3  Quantifying
 
-## 3.1 Data cleaning
+## 3.1 Data cleaning and creating new variables
 
 ```{r data_cleaning_1}
 overgewicht_1981 = overgewicht_over_tijd[1,5]
@@ -210,24 +214,36 @@ gezondheids_data_provincies <-
         
         Drenthe = data_analysis(drenthe , data_regios[2, 2:10]),
         
-        Overijssel = data_analysis(ijsselland, data_regios[3,2:10], twente, data_regios[4,2:10]),
+        Overijssel = data_analysis(ijsselland, data_regios[3,2:10], 
+                                   twente, data_regios[4,2:10]),
+        
         Flevoland = data_analysis(flevoland , data_regios[8, 2:10]),
-        Gelderland = data_analysis(noord_oost_gelderland, data_regios[5, 2:10], gelderland_midden, 
-        data_regios[6, 2:10], gelderland_zuid, data_regios[7, 2:10]),
+        
+        Gelderland = data_analysis(noord_oost_gelderland, data_regios[5, 2:10], 
+                                   gelderland_midden, data_regios[6, 2:10], 
+                                   gelderland_zuid, data_regios[7, 2:10]),
                               
         Utrecht = data_analysis(utrecht, data_regios[9, 2:10]),
                               
-        "Noord-Holland" = data_analysis(hollands_noorden , data_regios[10, 2:10], zaanstreek, data_regios[25, 2:10],
-        kennemerland, data_regios[11, 2:10], amsterdam, data_regios[12, 2:10], gooi, data_regios[13, 2:10]),
+        "Noord-Holland" = data_analysis(hollands_noorden , data_regios[10, 2:10], 
+                                        zaanstreek, data_regios[25, 2:10],
+                                        kennemerland, data_regios[11, 2:10], 
+                                        amsterdam, data_regios[12, 2:10],
+                                        gooi, data_regios[13, 2:10]),
 
-        "Zuid-Holland" = data_analysis(haaglanden, data_regios[23, 2:10], hollands_midden, data_regios[14, 2:10],
-         rotterdam, data_regios[15, 2:10], zuid_holland_zuid, data_regios[16, 2:10]),
+        "Zuid-Holland" = data_analysis(haaglanden, data_regios[23, 2:10],
+                                       hollands_midden, data_regios[14, 2:10],
+                                       rotterdam, data_regios[15, 2:10], 
+                                       zuid_holland_zuid, data_regios[16, 2:10]),
 
          Zeeland = data_analysis(zeeland , data_regios[17, 2:10]),
 
-         "Noord-Brabant" = data_analysis(west_brabant, data_regios[18, 2:10], hart_brabant, data_regios[19, 2:10], brabant_zuidoost, data_regios[20, 2:10]),
+         "Noord-Brabant" = data_analysis(west_brabant, data_regios[18, 2:10], 
+                                         hart_brabant, data_regios[19, 2:10],
+                                         brabant_zuidoost, data_regios[20, 2:10]),
 
-          Limburg = data_analysis(limburg_noord, data_regios[21, 2:10], limburg_zuid, data_regios[22, 2:10]))
+          Limburg = data_analysis(limburg_noord, data_regios[21, 2:10], 
+                                  limburg_zuid, data_regios[22, 2:10]))
 
 gezondheids_data_provincies <- as.data.frame(gezondheids_data_provincies)
 
@@ -273,18 +289,16 @@ name_change[12,1] <- "Limburg"
 dataset_map <- left_join(data_overweight_provence, name_change)
 ```
 
-Now these dataset can be merged into one complete dataset, the second final dataset.
-
-Variable 1
+Now these dataset can be merged into one complete dataset, the second final dataset. 
 
 ```{r gen_var1}
 proc_ver_overgewicht = ((overgewicht_2025 - overgewicht_1981) / overgewicht_1981) * 100
-proc_ver_overgewicht
+proc_ver_overgewicht[[1]]
 ```
 
-To show the importance of this research, the percentage change of overweight people in the Netherlands is calculated over 44 years, which is 63.5 percent. This is obviously a huge increase which need to be adressed and more attention given to.
+To show the importance of this research a new variable is created, the percentage change of overweight people in the Netherlands is calculated over 44 years, which is 63.5 percent. This is obviously a huge increase which need to be addressed and more attention given to.
 
-## 3.3 Visualize temporal variation
+## 3.3 Overweight and obesity over time
 
 ```{r}
 perc_over_time_plot = ggplot() +
@@ -312,12 +326,12 @@ ggsave("Graphs/Percentage_overgewicht_over_tijd.png",
 perc_over_time_plot
 
 ```
-A plot gets created with ggplot, which gets saved with ggsave. geom_line and geom_point get used to create a clear plot, with scale_x_continuous the x axis values get determined. 
 
+A plot gets created with ggplot, which gets saved with ggsave. geom_line and geom_point get used to create a clear plot, with scale_x_continuous the x axis values get determined.
 
 As shown in the graph, the percentage of overweight/obese people has increased at a relatively constant rate over time, with the exception of a larger increase between 1995 and 2000.
 
-## 3.4 Visualize spatial variation
+## 3.4 Maps of different provinces in the Netherlands for overweight, education and income
 
 ```{r visualise_map}
 provincies_kaart <- st_read(paste0(
@@ -332,17 +346,20 @@ nl_map <- provincies_kaart |> left_join(dataset_map, by = c("statnaam" = "Regio"
 
 
 ```
-One dataset gets merged with the provinces map of the Netherlands, to make 4 different maps to compare them. 
 
-```{r}
+One dataset gets merged with the provinces map of the Netherlands, to make 4 different maps to compare them.
+
+```{r, fig.align='left', fig.width=7, fig.height=7}
 combined_plot <-
   (ggplot(nl_map) +
   geom_sf(aes(fill = Overgewicht ), color = "white", linewidth = 0.4) +
-  scale_fill_gradient(name = "Percentage of \noverweight people \n(BMI > 25)
-                      \n(data reversed)",
+  scale_fill_gradient(name = "Percentage of \noverweight people \n(BMI > 25)\n(data reversed)",
                       high = "#e8f5e9", low = "#1b5e20") +
   labs(
-    title = "Percentage of overweight people\n by province in the Netherlands (2024)") +
+    title = "Percentage of
+    overweight people 
+    by province 
+    in the Netherlands (2024)") +
   theme_void() +
   theme(plot.title = element_text(hjust = 0.5, face = "bold"))
   |
@@ -351,7 +368,9 @@ combined_plot <-
   scale_fill_gradient(name = "Average income \n(x1000)", 
                       low = "#e8f5e9", high = "#1b5e20") +
   labs(
-    title   = "Average income by province\n in the Netherlands"  ) +
+    title   = "Average income 
+    by province
+    in the Netherlands"  ) +
   theme_void() +
   theme(plot.title = element_text(hjust = 0.5, face = "bold"))) /
   
@@ -360,7 +379,10 @@ combined_plot <-
   scale_fill_gradient(name = "Percentage highly \neducated people", 
                       low = "#e8f5e9", high = "#1b5e20") +
   labs(
-    title = "Percentage of highly educated people \n by province in the Netherlands (2024)") +
+    title = "Percentage of 
+    highly educated people 
+    by province 
+    in the Netherlands (2024)") +
   theme_void() +
   theme(plot.title = element_text(hjust = 0.5, face = "bold"))
  | 
@@ -369,32 +391,23 @@ combined_plot <-
   scale_fill_gradient(name = "Percentage lower\n educated people \n(data reversed)", 
                       high = "#e8f5e9", low = "#1b5e20") +
   labs(
-    title = "Percentage of lower educated people\n by province in the Netherlands (2024)") +
+    title = "Percentage of lower
+    educated people
+    by province in the Netherlands (2024)") +
   theme_void() +
   theme(plot.title = element_text(hjust = 0.5, face = "bold"))
    )
 
 combined_plot
-
-ggsave(
-  "Graphs/maps_comparison.png",
-  combined_plot,
-  width = 14,
-  height = 12,
-  dpi = 300
-)
-
-
 ```
-The dataset for the maps gets used for four different plots. These get combined into on big plot. (This plot down below does not show it right, but if you open the file, the graphs map and then open the maps_comparison.png it does look how it should look.)
 
-In the top left and down right, the data is reversed. This is done because this makes comparing the different maps easier and a lot more obvious.
+The dataset for the maps gets used for four different plots. These get combined into one big plot.
+
+In the top left and down right, the data is reversed. This is done because this makes comparing the different maps easier and clearer.
 
 As shown in the map representing the perecentage of overweight and obese individuals, the provinces Utrecht, Noord-Holland, and Groningen appear to have the lowest prevalence rates. In contrast, Flevoland, Limburg and Drenthe have the highest percentage of overweight and obese residents. Furthermore a possible correlation can be found between overweight and obesity and educational level. The provinces with the lowest prevalence rates also have the highest level of education, whereas Flevoland and Drenthe, which have a relatively lower education level, show a higher percentage of overweight and obese residents. The level of income and overweight appear to have a weaker relationship.
 
-## 3.5 Visualize sub-population variation
-
-What is the poverty rate by state?
+## 3.5 Overweight for men and women
 
 ```{r visualise_subpopulations}
 
@@ -430,11 +443,12 @@ ggsave("Graphs/plot_men_vs_women.png", plot_men_vs_women, width = 9, height = 6)
 plot_men_vs_women
 
 ```
+
 The plot gets created with ggplot and is saved with ggsave. geom_line and geom_point are used to create a clear plot, with scale_x_continuous the x axis values get determined.scale_color_manual gives the lines the correct colors. labs is used to create the labels/text in the graph.
 
 Over the 44-year period shown, the percentage of overweight adults has always been higher among men than among women. Although this gap has shrunk in recent years, men still show a higher rates of overweight. furthermore, the percentage of overweight men and the percentage of overweight women have generally moved together over time.
 
-## 3.6 Event analysis
+## 3.6 Dutch covenant overweight
 
 in 2005, the Dutch covenant overweight was introduced and signed by several organizations with the goal of preventing overweight and obesity. Here it is tested if the percentage of overweight and obese people has reduced since its introduction.
 
@@ -471,13 +485,13 @@ ggsave("Graphs/®plot_event.png", plot_event, width = 9, height = 6)
 plot_event
 
 ```
+
 The plot gets created with ggplot and is saved with ggsave. geom_line and geom_point are used to create a clear plot, with scale_x_continuous the x axis values get determined.geom_vline is for creating a vertical line at the year of the event and annotate is used for adding the event name next to the vertical line. Labs is used to create the labels/text in the graph.
 
 As shown in the temporal variation, the percentage of overweight/obese people has increased at a relatively constant rate over time. This rate seems a to have slowed down a little from 2005 onwards in absolute terms, but this could be due to multiple reasons. Consequently, it is hard to determine a clear change following the introduction of the covenant on overweight and obesity, but an argument could be made that it did make a change.
 
-# Part 4 - Discussion
+# 4 - Discussion
 
-## 4.1 Discuss your findings
 The results of this study show that overweight and obesity have become increasingly important public health issues in the Netherlands. Between 1981 and 2025, the percentage of overweight individuals increased by approximately 63.5%, highlighting a strong upward trend over time.
 
 Our regional analysis suggests a relationship between socioeconomic status and overweight prevalence. Provinces with a higher share of highly educated residents, such as Utrecht and Noord-Holland, generally have lower rates of overweight, while provinces with lower education levels, such as Drenthe and Flevoland, show higher rates. In contrast, the relationship between income and overweight appears less clear, suggesting that education may be more strongly associated with overweight than income.
@@ -486,11 +500,11 @@ We also found that men consistently have higher rates of overweight than women, 
 
 A limitation of this study is that it relies mainly on descriptive analysis and visual comparisons, meaning that causal relationships cannot be established. Nevertheless, the findings indicate that overweight is linked to broader socioeconomic inequalities and should be viewed as more than just an individual lifestyle issue.
 
-# Part 5 - Reproducibility
+# 5 Reproducibility
 
 ## 5.1 Github repository link
 
-Provide the link to your PUBLIC repository here: 
+Provide the link to your PUBLIC repository here:
 
 ## 5.2 Reference list
 
