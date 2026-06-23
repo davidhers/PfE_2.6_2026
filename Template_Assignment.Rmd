@@ -2,8 +2,7 @@
 title: "Overweightness and SES"
 author: "David Hers, 2905659 Norah Aalders, 2889433 Casper Flipse, 2898924 Sinem Göral, 2817932 Chris Kool, 2898107 Roel van Soelen, 2898917 "
 date: "`r Sys.Date()`"
-output: 
-  pdf_document:
+output: html_document
     toc: true
 ---
 
