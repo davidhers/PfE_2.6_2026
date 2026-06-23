@@ -434,6 +434,13 @@ As shown in the temporal variation, the percentage of overweight/obese people ha
 # Part 4 - Discussion
 
 ## 4.1 Discuss your findings
+The results of this study show that overweight and obesity have become increasingly important public health issues in the Netherlands. Between 1981 and 2025, the percentage of overweight individuals increased by approximately 63.5%, highlighting a strong upward trend over time.
+
+Our regional analysis suggests a relationship between socioeconomic status and overweight prevalence. Provinces with a higher share of highly educated residents, such as Utrecht and Noord-Holland, generally have lower rates of overweight, while provinces with lower education levels, such as Drenthe and Flevoland, show higher rates. In contrast, the relationship between income and overweight appears less clear, suggesting that education may be more strongly associated with overweight than income.
+
+We also found that men consistently have higher rates of overweight than women, although both groups follow a similar increasing trend over time. Furthermore, the introduction of the Dutch Covenant on Overweight in 2005 does not appear to have caused a clear reduction in overweight prevalence, although the growth rate may have slowed slightly.
+
+A limitation of this study is that it relies mainly on descriptive analysis and visual comparisons, meaning that causal relationships cannot be established. Nevertheless, the findings indicate that overweight is linked to broader socioeconomic inequalities and should be viewed as more than just an individual lifestyle issue.
 
 # Part 5 - Reproducibility
 
