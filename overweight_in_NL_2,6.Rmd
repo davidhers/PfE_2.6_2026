@@ -171,6 +171,8 @@ name_change[9,1] <- "Zuid-Holland"
 name_change[10,1] <- "Zeeland"
 name_change[11,1] <- "Noord-Brabant"
 name_change[12,1] <- "Limburg"
+
+#The code broke for once, where "Fryslân" caused a problem. When restarting the Rmd it did work.
 ```
 
 ```{r data_cleaning_6, include=FALSE}
