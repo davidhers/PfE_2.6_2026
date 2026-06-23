@@ -2,8 +2,9 @@
 title: "Overweightness and SES"
 author: "David Hers, 2905659 Norah Aalders, 2889433 Casper Flipse, 2898924 Sinem Göral, 2817932 Chris Kool, 2898107 Roel van Soelen, 2898917 "
 date: "`r Sys.Date()`"
-output: pdf_document
-Tutorial Lecturer: Fatima Amankour
+output: 
+  pdf_document:
+    toc: TRUE 
 ---
 
 ```{r package_install, include=FALSE}
@@ -13,6 +14,7 @@ Tutorial Lecturer: Fatima Amankour
 #install.packages()
 #install.packages("sf")   
 #install.packages("patchwork")
+install.packages("tinytex")
 ```
 
 ```{r packages}
@@ -22,6 +24,7 @@ require(yaml)
 library(readxl)
 library(sf)
 library(patchwork)
+tinytex::install_tinytex()
 ```
 
 # Overweightness and SES
@@ -101,22 +104,22 @@ opleiding_provincie <- data.frame("Regio" = opleiding_dataset[[4]][6:17],
 
 ```
 
-The education levels dataset of the Netherlands consists of 6 different columns that are used. First, completely on the left, the provinces, because this is what will be used later, To get the data we want to use 2 new variables need to be created, firstly the sixth and seventh column need to be added together, to create the percentage of 'lower educated' people in the Netherlands, and then the ninth and tenth column need to be added to get the percentage of 'higher educated' people in the Netherlands. This get combined into one dataset with data.frame with the percentage of 'middle educated' people in the Netherlands. Only rows 6 till 17 are used, because this is the data of the different provinces in the Netherlands.
+The education levels dataset of the Netherlands consists of 6 different columns that are used. First, completely on the left, the provences, because this is what will be used later, To get the data we want to use 2 new variables need to be created, firstly the sixth and seventh column need to be added together, to create the percentage of 'lower educated' people in the Netherlands, and then the ninth and tenth column need to be added to get the percentage of 'higher educated' people in the Netherlands. This get combined into one dataset with data.frame with the percentage of 'middle educated' people in the Netherlands. Only rows 6 till 17 are used, because this is the data of the different provences in the Netherlands.
 
 ```{r data_cleaning_5}
 gemiddeld_inkomen <- data.frame(Regio = inkomen_dataset[[4]][2:13],
                                 "Gemiddeld_inkomen(x 1000)" = inkomen_dataset[[6]][2:13])
 ```
 
-The income dataset is used in a similar way as the education levels dataset. A new data set gets created with data.frame, on the left again the provinces, called "Regio", or region in english. Next to that the average income per person of said province divided by 1000 is there.
+The income dataset is used in a similar way as the education levels dataset. A new data set gets created with data.frame, on the left again the provences, called "Regio", or region in english. Next to that the average income per person of said provence divided by 1000 is there.
 
 ```{r data_cleaning_6}
 data_regios <- gewicht_regios[grepl("\\(GG\\)", gewicht_regios[[3]] ), 3:12] 
 ```
 
-the last dataset that was loaded in is divided in GGD regions instead of provinces, because that is how the data is collected. In this dataset there is also differerent data of other regions which are not needed. The GGD data that is needed has GG in the names. the line "gewicht_regios[grepl("\\(GG\\)", gewicht_regios[[3]] ), 3:12]" selects that data so that it can be used in the coming chunks.
+the last dataset that was loaded in is divided in GGD regions instead of provences, because that is how the data is collected. In this dataset there is also differerent data of other regions which are not needed. The GGD data that is needed has GG in the names. the line "gewicht_regios[grepl("\\(GG\\)", gewicht_regios[[3]] ), 3:12]" selects that data so that it can be used in the coming chunks.
 
-The dataset (data_regios) is built up in regions instead of provinces. To compare this dataset to the other datasets, which are built up in provinces, the regions need to be transformed into provinces aswell. This is done with the following data from AlleCijfers.nl (AlleCijfers, 2026).
+The dataset (data_regios) is built up in regions instead of provences. To compare this dataset to the other datasets, which are built up in provences, the regions need to be transformed into provences aswell. This is done with the following data from AlleCijfers.nl (AlleCijfers, 2026).
 
 ```{r data_GGD_regions(AlleCijfers, 2026)}
 groningen <- 601286
@@ -276,10 +279,10 @@ ggsave("Graphs/Percentage_overgewicht_over_tijd.png", perc_over_time_plot, width
 
 perc_over_time_plot
 
-#A plot gets created with ggplot, which gets saved with ggsave. geom_line and geom_point are used to create a clear plot, with scale_x_continuous the x axis values get determined.
+#A plot gets created with ggplot, which gets saved with ggsave. geom_line and geom_point get used to create a clear plot, with scale_x_continuous the x axis values get determined. 
 ```
 
-The graph reveals that the percentage of overweight/obese people has increased at a relatively constant rate over time, with the exception of a larger increase between 1995 and 2000.
+As shown in the graph, the percentage of overweight/obese people has increased at a relatively constant rate over time, with the exception of a larger increase between 1995 and 2000.
 
 ## 3.4 Visualize spatial variation
 
