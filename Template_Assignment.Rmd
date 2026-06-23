@@ -276,10 +276,10 @@ ggsave("Graphs/Percentage_overgewicht_over_tijd.png", perc_over_time_plot, width
 
 perc_over_time_plot
 
-#A plot gets created with ggplot, which gets saved with ggsave. geom_line and geom_point get used to create a clear plot, with scale_x_continuous the x axis values get determined. 
+#A plot gets created with ggplot, which gets saved with ggsave. geom_line and geom_point are used to create a clear plot, with scale_x_continuous the x axis values get determined.
 ```
 
-As shown in the graph, the percentage of overweight/obese people has increased at a relatively constant rate over time, with the exception of a larger increase between 1995 and 2000.
+The graph reveals that the percentage of overweight/obese people has increased at a relatively constant rate over time, with the exception of a larger increase between 1995 and 2000.
 
 ## 3.4 Visualize spatial variation
 
@@ -384,7 +384,7 @@ plot_men_vs_women <- ggplot() +
   
 ggsave("Graphs/plot_men_vs_women.png", plot_men_vs_women, width = 9, height = 6)
 plot_men_vs_women
-
+#The plot gets created with ggplot and is saved with ggsave. geom_line and geom_point are used to create a clear plot, with scale_x_continuous the x axis values get determined.scale_color_manual gives the lines the correct colors. labs is used to create the labels/text in the graph.
 ```
 
 Over the 44-year period shown, the percentage of overweight adults has always been higher among men than among women. Although this gap has shrunk in recent years, men still show a higher rates of overweight. furthermore, the percentage of overweight men and the percentage of overweight women have generally moved together over time.
@@ -423,6 +423,7 @@ plot_event <- ggplot() +
   
 ggsave("Graphs/®plot_event.png", plot_event, width = 9, height = 6)
 plot_event
+#The plot gets created with ggplot and is saved with ggsave. geom_line and geom_point are used to create a clear plot, with scale_x_continuous the x axis values get determined.geom_vline is for creating a vertical line at the year of the event and annotate is used for adding the event name next to the vertical line. labs is used to create the labels/text in the graph.
 ```
 
 As shown in the temporal variation, the percentage of overweight/obese people has increased at a relatively constant rate over time. This rate seems a to have slowed down a little from 2005 onwards in absolute terms, but this could be due to multiple reasons. Consequently, it is hard to determine a clear change following the introduction of the covenant on overweight and obesity, but an argument could be made that it did make a change.
