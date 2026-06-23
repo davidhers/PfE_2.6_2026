@@ -44,8 +44,6 @@ library(patchwork)
 
 Walk through any Dutch city today and the numbers get to ignore. More than half of Dutch adults are overweight, one in six has obesity (Rijksinstituut voor Volksgezondheid en Milieu [RIVM], 2026), and if current trends continue, two in three people could be affected by 2050. What was once seen as a personal health issue has become a major social challenge. This became clear when Zorginstituut Nederland announced that bariatric surgery will now be covered by basic health insurance for teenagers aged 13 to 18 with severe obesity. Although only a small number of young people will qualify, the decision reflects growing recognition that lifestyle interventions alone are not always enough. To understand obesity, however, we must look beyond individual choices. In the Netherlands, obesity is strongly linked to social inequality. People with lower levels of education are significantly more likely to be overweight than university graduates (RIVM, 2026). Lower-income groups often have less access to healthy food, safe places to exercise, and supportive living environments. Research also shows that factors such as neighborhood safety, green spaces, and social cohesion influence obesity rates.(OECD & European Observatory on Health Systems and Policies, 2025). The consequences extend beyond health. Obesity is associated with higher healthcare costs, lower earnings, increased sick leave, and reduced economic productivity. Children with obesity are more likely to face educational, social, and health disadvantages later in life. This argues that obesity in the Netherlands should be viewed as a social problem rather than simply a matter of personal responsibility. Addressing it effectively requires tackling the structural inequalities that make obesity more common among disadvantaged groups.
 
-\clearpage
-
 # 2 Data
 
 ## 2.1 Loading in data.
@@ -86,7 +84,9 @@ Collectively, these datasets enhance each other effectively. The Health Monitor 
 
 These datasets are to big to show here, but the key variables will be explained now. In the first dataset, the health per region with 9 different values, only the region, lightly overweight and obesity columns are needed. In the rows not everything is important aswell, but that will be discussed in the data cleaning. The second dataset, the percentage of overweight people over the years, is divided into underweight, overweight and obesity. Only overweight and obesity will be used, and of course the years. This will be used for total percentage of people, total percentage of men and total percentage of women. The third dataset contains information about income. The only necessary variables in this dataset are the province and the average income per person for these province The last dataset is about education level for every province. This is divided into five different education levels that will be needed, and again the provinces. \# 3 Quantifying
 
-## 3.1 Data cleaning and creating new variables
+
+# 3 Data cleaning and creating new variables
+ 
 
 ```{r data_cleaning_1, include = TRUE}
 overgewicht_1981 = overgewicht_over_tijd[1,5]
@@ -101,7 +101,7 @@ proc_ver_overgewicht[[1]]
 
 To show the importance of this research a new variable is created, the percentage change of overweight people in the Netherlands is calculated over 44 years, which is 63.5 percent. This is obviously a huge increase which need to be addressed and more attention given to.
 
-## 3.2 Data cleaning final dataset one
+## 3.1 Data cleaning final dataset one
 
 ```{r data_cleaning_2, include=FALSE}
 perc_overgewicht <- 
@@ -130,7 +130,7 @@ perc_overgewicht
 
 From left to right the columns are; year, total percentage of overweight people, total percentage of obese people, total percentage of overweight men, total percentage of overweight women and percentage point change of the total percentage of overweight people.
 
-## 3.3 Data cleaning final dataset two
+## 3.2 Data cleaning final dataset two
 
 ```{r data_cleaning_4,include=FALSE}
 opleiding_provincie <- 
@@ -313,7 +313,7 @@ dataset_map[c(1,2,3)]
 
 again, from left to right, including the last three columns that arent visible; Province, total percentage of overweight people, percentage of lower educated people, percentage of middle educated people, percentage of higher educated people, average income per person per province (x1000). These got then left_joined with the data for the map, to create one dataset to plot the 4 maps.
 
-## 3.4 Overweight and obesity over time
+## 3.3 Overweight and obesity over time
 
 ```{r echo=FALSE}
 perc_over_time_plot = ggplot() +
@@ -344,7 +344,7 @@ perc_over_time_plot
 
 As shown in the graph, the percentage of overweight/obese people has increased at a relatively constant rate over time, with the exception of a larger increase between 1995 and 2000.
 
-## 3.5 Maps of different provinces in the Netherlands for overweight, education and income
+## 3.4 Maps of different provinces in the Netherlands for overweight, education and income
 
 ```{r visualise_map, include=FALSE}
 provincies_kaart <- st_read(paste0(
@@ -419,7 +419,7 @@ In the top left and down right, the data is reversed. This is done because this 
 
 As shown in the map representing the perecentage of overweight and obese individuals, the provinces Utrecht, Noord-Holland, and Groningen appear to have the lowest prevalence rates. In contrast, Flevoland, Limburg and Drenthe have the highest percentage of overweight and obese residents. Furthermore a possible correlation can be found between overweight and obesity and educational level. The provinces with the lowest prevalence rates also have the highest level of education, whereas Flevoland and Drenthe, which have a relatively lower education level, show a higher percentage of overweight and obese residents. The level of income and overweight appear to have a weaker relationship.
 
-## 3.6 Overweight for men and women
+## 3.5 Overweight for men and women
 
 ```{r visualise_subpopulations, echo=FALSE}
 
@@ -459,7 +459,7 @@ plot_men_vs_women
 
 Over the 44-year period shown, the percentage of overweight adults has always been higher among men than among women. Although this gap has shrunk in recent years, men still show a higher rates of overweight. furthermore, the percentage of overweight men and the percentage of overweight women have generally moved together over time.
 
-## 3.7 Dutch covenant overweight
+## 3.6 Dutch covenant overweight
 
 in 2005, the Dutch covenant overweight was introduced and signed by several organizations with the goal of preventing overweight and obesity. Here it is tested if the percentage of overweight and obese people has reduced since its introduction.
 
@@ -518,6 +518,18 @@ Provide the link to your PUBLIC repository here: <https://github.com/davidhers/P
 
 ## 5.2 How to reproduce
 
+Overweight and SES project:
+
+-  README.md
+
+-  overweight_in_NL_2,6.Rmd
+
+-  data/
+  - gewicht_regios.rds
+  - opleiding_dataset.rds
+  - inkomen_dataset.rds
+  - overgewicht_over_tijd.rds
+  
 
 
 ## 5.3 Reference list
